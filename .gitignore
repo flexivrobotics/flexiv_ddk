@@ -1,0 +1,8 @@
+build/
+.vscode/
+.DS_Store
+generated/
+collected/
+install/
+cloned/
+.history/
