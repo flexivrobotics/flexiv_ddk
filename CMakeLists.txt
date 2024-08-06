@@ -102,6 +102,6 @@ else()
 endif()
 
 # Install the INTERFACE library
-message(STATUS "C++ RDK library: ${DDK_CPP_LIB}")
+message(STATUS "C++ DDK library: ${DDK_CPP_LIB}")
 include(${CMAKE_CURRENT_SOURCE_DIR}/cmake/FlexivInstallLibrary.cmake)
 FlexivInstallLibrary()

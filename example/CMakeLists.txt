@@ -14,9 +14,10 @@ endif()
 
 # Example list
 set(EXAMPLE_LIST
-  basics1_display_robot_states
-  basics2_clear_fault
-  basics3_primitive_execution
+  basics1_display_joint_states
+  basics2_display_cartesian_states
+  basics3_display_plan_info
+  basics4_display_primitive_states
 )
 
 

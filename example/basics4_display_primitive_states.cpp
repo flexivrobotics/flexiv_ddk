@@ -1,71 +1,88 @@
 /**
- * @example basics2_clear_fault.cpp
- * This tutorial clears minor or critical faults, if any, of the connected robot.
+ * @example basics4_display_primitive_states.cpp
+ * This tutorial check connection with the robot and print current primitive states.
  * @copyright Copyright (C) 2016-2024 Flexiv Ltd. All Rights Reserved.
  * @author Flexiv
  */
 
-#include <flexiv/rdk/robot.hpp>
-#include <flexiv/rdk/utility.hpp>
+#include <flexiv/ddk/client.hpp>
+#include <flexiv/ddk/utility.hpp>
 #include <spdlog/spdlog.h>
 
 #include <iostream>
-#include <string>
 #include <thread>
 
 /** @brief Print program usage help */
-void PrintHelp()
-{
-    // clang-format off
+void PrintHelp() {
+  // clang-format off
     std::cout << "Required arguments: [robot SN]" << std::endl;
     std::cout << "    robot SN: Serial number of the robot to connect to. "
                  "Remove any space, for example: Rizon4s-123456" << std::endl;
     std::cout << "Optional arguments: None" << std::endl;
     std::cout << std::endl;
-    // clang-format on
+  // clang-format on
 }
 
-int main(int argc, char* argv[])
-{
-    // Program Setup
-    // =============================================================================================
-    // Parse parameters
-    if (argc < 2 || flexiv::rdk::utility::ProgramArgsExistAny(argc, argv, {"-h", "--help"})) {
-        PrintHelp();
+/** @brief Print robot joint states data @ 1Hz */
+void printRobotStates(flexiv::ddk::Client &client) {
+  while (true) {
+            // Check connection with the robot
+    if (!client.connected()) {
+        throw std::runtime_error("Can not connect with robot, exiting ...");
+      }
+    // Print all robot states in JSON format using the built-in ostream operator
+    // overloading
+    spdlog::info("Current primitive states:");
+    std::cout << "primitiveName= "<<flexiv::ddk::utility::ParsePtStates(client.primitive_states(), "primitiveName")<< std::endl;
+    std::cout << "reachedTarget= "<<flexiv::ddk::utility::ParsePtStates(client.primitive_states(), "reachedTarget")<< std::endl;
+    std::this_thread::sleep_for(std::chrono::seconds(1));
+  }
+}
+
+int main(int argc, char *argv[]) {
+  // Program Setup
+  // =============================================================================================
+  // Parse parameters
+  if (argc < 2 ||
+      flexiv::ddk::utility::ProgramArgsExistAny(argc, argv, {"-h", "--help"})) {
+    PrintHelp();
+    return 1;
+  }
+  // Serial number of the robot to connect to. Remove any space, for example:
+  // Rizon4s-123456
+  std::string robot_sn = argv[1];
+
+  // Print description
+  spdlog::info(">>> Tutorial description <<<\nThis tutorial check connection "
+               "with the robot and print plan infos.");
+
+  try {
+    // DDK Initialization
+    // =========================================================================================
+    // Instantiate DDK client interface
+    flexiv::ddk::Client client(robot_sn);
+
+    // Check connection with the robot
+    if (!client.connected()) {
+        spdlog::error("Can not connect with robot "+robot_sn+", please double check the serial number or the network settings! \nExiting ...");
         return 1;
+      }else
+    {
+      spdlog::info("Successfully connected with robot "+robot_sn);
     }
-    // Serial number of the robot to connect to. Remove any space, for example: Rizon4s-123456
-    std::string robot_sn = argv[1];
+    // Print States
+    // =========================================================================================
+    // Use std::thread to do scheduling so that this example can run on all OS
+        std::thread low_priority_thread(
+        std::bind(printRobotStates, std::ref(client)));
 
-    // Print description
-    spdlog::info(
-        ">>> Tutorial description <<<\nThis tutorial clears minor or critical faults, if any, of "
-        "the connected robot.");
+    // Properly exit thread
+    low_priority_thread.join();
 
-    try {
-        // RDK Initialization
-        // =========================================================================================
-        // Instantiate robot interface
-        flexiv::rdk::Robot robot(robot_sn);
+  } catch (const std::exception &e) {
+    spdlog::error(e.what());
+    return 1;
+  }
 
-        // Fault Clearing
-        // =========================================================================================
-        // Clear fault on the connected robot if any
-        if (robot.fault()) {
-            spdlog::warn("Fault occurred on the connected robot, trying to clear ...");
-            // Try to clear the fault
-            if (!robot.ClearFault()) {
-                spdlog::error("Fault cannot be cleared, exiting ...");
-                return 1;
-            }
-            spdlog::info("Fault on the connected robot is cleared");
-        } else {
-            spdlog::info("No fault on the connected robot");
-        }
-    } catch (const std::exception& e) {
-        spdlog::error(e.what());
-        return 1;
-    }
-
-    return 0;
+  return 0;
 }
