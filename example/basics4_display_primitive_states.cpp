@@ -62,14 +62,6 @@ int main(int argc, char *argv[]) {
     // Instantiate DDK client interface
     flexiv::ddk::Client client(robot_sn);
 
-    // Check connection with the robot
-    if (!client.connected()) {
-        spdlog::error("Can not connect with robot "+robot_sn+", please double check the serial number or the network settings! \nExiting ...");
-        return 1;
-      }else
-    {
-      spdlog::info("Successfully connected with robot "+robot_sn);
-    }
     // Print States
     // =========================================================================================
     // Use std::thread to do scheduling so that this example can run on all OS
