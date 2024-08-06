@@ -1,6 +1,7 @@
 /**
  * @example basics1_display_joint_states.cpp
- * This tutorial check connection with the robot and print received robot joint states.
+ * This tutorial check connection with the robot and print received robot joint
+ * states.
  * @copyright Copyright (C) 2016-2024 Flexiv Ltd. All Rights Reserved.
  * @author Flexiv
  */
@@ -28,8 +29,8 @@ void printRobotStates(flexiv::ddk::Client &client) {
   while (true) {
     // Check connection with the robot
     if (!client.connected()) {
-        throw std::runtime_error("Can not connect with robot, exiting ...");
-      }
+      throw std::runtime_error("Can not connect with robot, exiting ...");
+    }
     // Print all robot states in JSON format using the built-in ostream operator
     // overloading
     spdlog::info("Current robot joint states:");
@@ -64,7 +65,7 @@ int main(int argc, char *argv[]) {
     // Print States
     // =========================================================================================
     // Use std::thread to do scheduling so that this example can run on all OS
-        std::thread low_priority_thread(
+    std::thread low_priority_thread(
         std::bind(printRobotStates, std::ref(client)));
 
     // Properly exit thread
