@@ -10,13 +10,12 @@ Flexiv DDK (Data Development Kit), a key component of the Flexiv Robotic Softwar
 
 | **Supported OS**           | **Supported processor** | **Supported language** | **Required compiler kit** |
 | -------------------------- | ----------------------- | ---------------------- | ------------------------- |
-| Linux (Ubuntu 20.04/22.04) | x86_64, arm64           | C++, Python            | build-essential           |
-| macOS 12 and above         | arm64                   | C++, Python            | Xcode Command Line Tools  |
-| Windows 10/11              | x86_64                  | C++, Python            | MSVC v14.2+               |
+| Linux (Ubuntu 20.04/22.04) | x86_64                  | C++                    | build-essential           |
+| Windows 10/11              | x86_64                  | C++                    | MSVC v14.2+               |
 
 ## Quick Start
 
-The **C++ and Python** DDK libraries are packed into a unified modern CMake project named ``flexiv_ddk``, which can be configured and installed via CMake on all supported OS.
+The **C++** DDK libraries are packed into a unified modern CMake project named ``flexiv_ddk``, which can be configured and installed via CMake on all supported OS.
 
 ### Note
 
@@ -24,11 +23,11 @@ The **C++ and Python** DDK libraries are packed into a unified modern CMake proj
 
 ### Install on Linux
 
-1. In a new Terminal, install compiler kit, CMake (with GUI), Python interpreter, and Python package manager:
+1. In a new Terminal, install compiler kit, CMake (with GUI):
 
-       sudo apt install build-essential cmake cmake-qt-gui python3 python3-pip -y
+       sudo apt install build-essential cmake cmake-qt-gui -y
 
-2. Choose a directory for installing C++ DDK library and all its dependencies. This directory can be under system path or not, depending on whether you want DDK to be globally discoverable by CMake. For example, a new folder named ``ddk_install`` under the home directory.
+2. Choose a directory for installing DDK library and all its dependencies. This directory can be under system path or not, depending on whether you want DDK to be globally discoverable by CMake. For example, a new folder named ``ddk_install`` under the home directory.
 3. In a new Terminal, run the provided script to compile and install all C++ dependencies to the installation directory chosen in step 2:
 
        cd flexiv_ddk/thirdparty
@@ -38,26 +37,16 @@ The **C++ and Python** DDK libraries are packed into a unified modern CMake proj
 
        cd flexiv_ddk
        mkdir build && cd build
-       cmake .. -DCMAKE_INSTALL_PREFIX=~/ddk_install -DINSTALL_PYTHON_DDK=ON
+       cmake .. -DCMAKE_INSTALL_PREFIX=~/ddk_install
 
-   NOTE: ``-D`` followed by ``CMAKE_INSTALL_PREFIX`` sets the CMake variable that specifies the path of the installation directory. ``-D`` followed by ``INSTALL_PYTHON_DDK=ON`` enables the installation of Python DDK besides C++ DDK. The configuration process can also be done using CMake GUI.
+   NOTE: ``-D`` followed by ``CMAKE_INSTALL_PREFIX`` sets the CMake variable that specifies the path of the installation directory. The configuration process can also be done using CMake GUI.
 
-5. Install C++ and Python DDK:
+5. Install DDK:
 
        cd flexiv_ddk/build
        cmake --build . --target install --config Release
 
-   C++ DDK is installed to the path specified by ``CMAKE_INSTALL_PREFIX``, which may or may not be globally discoverable by CMake. Python DDK is installed to the user site packages path, which is globally discoverable by Python interpreter.
-
-### Install on macOS
-
-1. Install compiler kit: In a new Terminal, enter command ``xcode-select`` to invoke the installation of Xcode Command Line Tools, then follow the prompted window to finish the installation.
-2. Install CMake (with GUI): Download ``cmake-3.x.x-macos-universal.dmg`` from [CMake download page](https://cmake.org/download/) and install the dmg file. The minimum required version is 3.16.3. When done, start CMake from Launchpad and navigate to Tools -> How to Install For Command Line Use. Then follow the instruction "Or, to install symlinks to '/usr/local/bin', run:" to install ``cmake`` and ``cmake-gui`` commands for use in Terminal.
-3. Install Python interpreter and package manager (replace "3.x" with the actual Python3 version you wish to use):
-
-       brew install python@3.x
-
-4. The rest are identical to steps 2 and below in [Install on Linux](#install-on-linux).
+   DDK is installed to the path specified by ``CMAKE_INSTALL_PREFIX``, which may or may not be globally discoverable by CMake.
 
 ### Install on Windows
 
@@ -69,20 +58,18 @@ The **C++ and Python** DDK libraries are packed into a unified modern CMake proj
 3. Install bash emulator: Download and install [Git for Windows](https://git-scm.com/download/win/), which comes with a bash emulator Git Bash.
 4. Within the bash emulator, the rest are identical to steps 2 and below in [Install on Linux](#install-on-linux).
 
-### Link to C++ DDK from a user program
+### Link to DDK from a user program
 
-After C++ DDK is installed, it can be found as a CMake library and linked to by other CMake projects. Use the provided examples project for instance::
+After DDK is installed, it can be found as a CMake library and linked to by other CMake projects. Use the provided examples project for instance::
 
     cd flexiv_ddk/example
     mkdir build && cd build
     cmake .. -DCMAKE_INSTALL_PREFIX=~/ddk_install
     cmake --build . --config Release -j 4
 
-NOTE: ``-D`` followed by ``CMAKE_INSTALL_PREFIX`` tells the user project's CMake where to find the installed C++ DDK library. The instruction above applies to all supported OS.
+NOTE: ``-D`` followed by ``CMAKE_INSTALL_PREFIX`` tells the user project's CMake where to find the installed DDK library. The instruction above applies to all supported OS.
 
 ### Run example programs
-
-#### C++
 
 To run a compiled example C++ program:
 
@@ -92,18 +79,6 @@ To run a compiled example C++ program:
 For example:
 
     ./basics1_display_joint_states Rizon4s-123456
-
-
-#### Python
-
-To run a example Python program:
-
-    cd flexiv_ddk/example_py
-    python3 <program_name>.py [robot_serial_number]
-
-For example:
-
-    python3 ./basics1_display_joint_states.py Rizon4s-123456
 
 ## API Documentation
 
