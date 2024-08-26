@@ -76,6 +76,38 @@ public:
    */
   const std::vector<std::string> primitive_states() const;
 
+  /**
+   * @brief [Non-blocking] Access the current time from server. It contains
+   * current seconds since epoch and nanoseconds since last full second
+   * @return ServerTime value copy.
+   */
+  const ddk::ServerTime &server_time(void) const;
+
+  /**
+   * @brief [Non-blocking] Whether the emergency stop is released.
+   * @return True: released; false: pressed.
+   */
+  bool estop_released() const;
+
+  /**
+   * @brief [Non-blocking] Whether the enabling button is pressed.
+   * @return True: pressed; false: released.
+   */
+  bool enabling_button_pressed() const;
+
+  /**
+   * @brief [Non-blocking] Access the current system state
+   * @return SystemState value copy.
+   */
+  SystemState system_state() const;
+
+  /**
+   * @brief [Non-blocking] Read all digital input ports on the control box.
+   * @return Digital input readings array whose index corresponds to the digital
+   * input port index. True: port high, false: port low.
+   */
+  const std::array<bool, ddk::kIOPorts> digital_inputs(void) const;
+
 private:
   class Impl;
   std::unique_ptr<Impl> pimpl_;

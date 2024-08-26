@@ -8,10 +8,11 @@
 
 #include <algorithm>
 #include <array>
+#include <chrono>
+#include <iomanip>
 #include <sstream>
 #include <string>
 #include <vector>
-
 namespace flexiv {
 namespace ddk {
 namespace utility {
@@ -128,6 +129,39 @@ inline std::string ParsePtStates(const std::vector<std::string> &pt_states,
   }
 
   return "";
+}
+
+/**
+ * @brief Convert the server time into format data time string.
+ * @param sec_since_epoch Current seconds since epoch.
+ * @param nano_sec_since_full_sec Number of nanoseconds since last full second.
+ * @param format The format of target date time string.
+ * @return Converted date time string.
+ */
+inline std::string
+convertToDateTimeString(int sec_since_epoch, int nano_sec_since_full_sec,
+                        const std::string &format = "%Y-%m-%d %H:%M:%S") {
+  // Convert sec_since_epoch to a time_point
+  std::chrono::system_clock::time_point tp =
+      std::chrono::system_clock::time_point(
+          std::chrono::seconds(sec_since_epoch));
+
+  // Convert time_point to time_t for conversion to tm structure
+  std::time_t time = std::chrono::system_clock::to_time_t(tp);
+
+  // Convert time_t to tm (local time)
+  std::tm *local = std::localtime(&time);
+
+  // Create a stringstream to format the output
+  std::stringstream ss;
+
+  // Format the time using std::put_time and the provided format
+  ss << std::put_time(local, format.c_str());
+
+  // Add nanoseconds part, if needed
+  ss << "." << std::setw(9) << std::setfill('0') << nano_sec_since_full_sec;
+
+  return ss.str();
 }
 
 } /* namespace utility */
