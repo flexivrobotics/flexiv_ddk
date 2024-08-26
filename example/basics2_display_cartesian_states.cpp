@@ -5,12 +5,27 @@
  * @copyright Copyright (C) 2016-2024 Flexiv Ltd. All Rights Reserved.
  * @author Flexiv
  */
-
+#include <atomic>
+#include <csignal>
 #include <flexiv/ddk/client.hpp>
 #include <flexiv/ddk/utility.hpp>
 #include <iostream>
 #include <spdlog/spdlog.h>
 #include <thread>
+namespace {
+/** Atomic signal to stop periodic print tasks */
+std::atomic<bool> keep_running(true);
+} // namespace
+
+/**
+ * @brief Handler for user stop interaction
+ */
+void SignalHandler(int signal) {
+  if (signal == SIGINT) {
+    keep_running = false;
+    spdlog::info("Signal received, stopping...");
+  }
+}
 
 /** @brief Print program usage help */
 void PrintHelp() {
@@ -25,10 +40,12 @@ void PrintHelp() {
 
 /** @brief Print robot Cartesian states data @ 1Hz */
 void printCartesianStates(flexiv::ddk::Client &client) {
-  while (true) {
+  while (keep_running.load()) {
     // Check connection with the robot
     if (!client.connected()) {
-      throw std::runtime_error("Can not connect with robot, exiting ...");
+      spdlog::error("Cannot connect with robot, retrying...");
+      std::this_thread::sleep_for(std::chrono::seconds(5));
+      continue;
     }
     // Print all robot states in JSON format using the built-in ostream operator
     // overloading
@@ -54,6 +71,9 @@ int main(int argc, char *argv[]) {
   // Print description
   spdlog::info(">>> Tutorial description <<<\nThis tutorial check connection "
                "with the robot and print received robot cartesian states.");
+
+  // Setup signal handler for graceful exit
+  std::signal(SIGINT, SignalHandler);
 
   try {
     // DDK Initialization
