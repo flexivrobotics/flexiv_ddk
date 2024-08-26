@@ -255,21 +255,6 @@ constexpr const char *getSystemStateName(SystemState state) {
 }
 
 /**
- * @struct SystemStatus
- * @brief Data structure containing information of the system status
- */
-struct SystemStatus {
-  /** Current system states */
-  SystemState system_state = SystemState::ST_UNKNOWN;
-
-  /** Flag to indicate that E-stop is released or not */
-  bool estop_released = false;
-
-  /** Flag to indicate that enabling button is pressed or not */
-  bool enabling_button_pressed = false;
-};
-
-/**
  * @brief Operator overloading to out stream all robot states in JSON format:
  * {"state_1": [val1,val2,val3,...], "state_2": [val1,val2,val3,...], ...}.
  * @param[in] ostream Ostream instance.
@@ -309,16 +294,6 @@ std::ostream &operator<<(std::ostream &ostream, const ServerTime &server_time);
 
 /**
  * @brief Operator overloading to out stream all system status in JSON format:
- * {"info_1": [val1,val2,val3,...], "info_2": [val1,val2,val3,...], ...}.
- * @param ostream Ostream instance.
- * @param system_state SystemState data structure to out stream.
- * @return Updated ostream instance.
- */
-std::ostream &operator<<(std::ostream &ostream,
-                         const SystemState &system_state);
-
-/**
- * @brief Operator overloading to out stream digital input state in JSON format:
  * {"info_1": [val1,val2,val3,...], "info_2": [val1,val2,val3,...], ...}.
  * @param ostream Ostream instance.
  * @param system_state SystemState data structure to out stream.
