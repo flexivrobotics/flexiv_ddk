@@ -8,9 +8,8 @@
 
 #include <flexiv/ddk/client.hpp>
 #include <flexiv/ddk/utility.hpp>
-#include <spdlog/spdlog.h>
-
 #include <iostream>
+#include <spdlog/spdlog.h>
 #include <thread>
 
 /** @brief Print program usage help */
@@ -24,8 +23,8 @@ void PrintHelp() {
   // clang-format on
 }
 
-/** @brief Print robot joint states data @ 1Hz */
-void printRobotStates(flexiv::ddk::Client &client) {
+/** @brief Print plan info @ 1Hz */
+void printPlanInfo(flexiv::ddk::Client &client) {
   while (true) {
     // Check connection with the robot
     if (!client.connected()) {
@@ -65,8 +64,7 @@ int main(int argc, char *argv[]) {
     // Print States
     // =========================================================================================
     // Use std::thread to do scheduling so that this example can run on all OS
-    std::thread low_priority_thread(
-        std::bind(printRobotStates, std::ref(client)));
+    std::thread low_priority_thread(std::bind(printPlanInfo, std::ref(client)));
 
     // Properly exit thread
     low_priority_thread.join();

@@ -1,7 +1,6 @@
 /**
- * @example basics4_display_primitive_states.cpp
- * This tutorial check connection with the robot and print current primitive
- * states.
+ * @example basics5_display_server_time.cpp
+ * This tutorial check connection with the robot and print current server time.
  * @copyright Copyright (C) 2016-2024 Flexiv Ltd. All Rights Reserved.
  * @author Flexiv
  */
@@ -23,23 +22,19 @@ void PrintHelp() {
   // clang-format on
 }
 
-/** @brief Print primitive states data @ 1Hz */
-void printPrimitiveStates(flexiv::ddk::Client &client) {
+/** @brief Print server time @ 1Hz */
+void printServerTime(flexiv::ddk::Client &client) {
   while (true) {
     // Check connection with the robot
     if (!client.connected()) {
       throw std::runtime_error("Can not connect with robot, exiting ...");
     }
-    // Print all robot states in JSON format using the built-in ostream operator
-    // overloading
-    spdlog::info("Current primitive states:");
-    std::cout << "primitiveName= "
-              << flexiv::ddk::utility::ParsePtStates(client.primitive_states(),
-                                                     "primitiveName")
-              << std::endl;
-    std::cout << "reachedTarget= "
-              << flexiv::ddk::utility::ParsePtStates(client.primitive_states(),
-                                                     "reachedTarget")
+    // Print server time using helper function in flexiv::ddk::utility to
+    // convert current seconds since epoch and number of nanoseconds since last
+    // full second into target format.
+    spdlog::info("Current server time:");
+    std::cout << flexiv::ddk::utility::convertToDateTimeString(
+                     client.server_time().sec, client.server_time().nano_sec)
               << std::endl;
     std::this_thread::sleep_for(std::chrono::seconds(1));
   }
@@ -72,7 +67,7 @@ int main(int argc, char *argv[]) {
     // =========================================================================================
     // Use std::thread to do scheduling so that this example can run on all OS
     std::thread low_priority_thread(
-        std::bind(printPrimitiveStates, std::ref(client)));
+        std::bind(printServerTime, std::ref(client)));
 
     // Properly exit thread
     low_priority_thread.join();

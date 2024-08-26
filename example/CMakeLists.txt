@@ -18,6 +18,8 @@ set(EXAMPLE_LIST
   basics2_display_cartesian_states
   basics3_display_plan_info
   basics4_display_primitive_states
+  basics5_display_server_time
+  basics6_display_system_status
 )
 
 
