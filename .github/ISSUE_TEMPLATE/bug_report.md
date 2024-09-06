@@ -3,12 +3,13 @@ name: Bug report
 about: Create a report to help us improve
 title: "[BUG]"
 labels: bug
-assignees: pzhu-flexiv
+assignees: pzhu-flexiv, ZhipengZhang-flexiv
+
 
 ---
 
 **Version information**
-- DDK: [e.g. v0.8]
+- DDK: [e.g. v1.0]
 - Robot software: [e.g. v3.6]
 - OS: [e.g. Ubuntu 20.04 - x86_64]
 

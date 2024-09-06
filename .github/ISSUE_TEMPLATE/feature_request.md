@@ -3,7 +3,7 @@ name: Feature request
 about: Suggest a new feature for DDK
 title: "[FEATURE]"
 labels: enhancement
-assignees: pzhu-flexiv
+assignees: pzhu-flexiv, ZhipengZhang-flexiv
 
 ---
 
