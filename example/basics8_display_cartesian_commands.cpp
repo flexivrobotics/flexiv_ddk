@@ -1,7 +1,7 @@
 /**
- * @example basics2_display_cartesian_states.cpp
+ * @example basics2_display_cartesian_commands.cpp
  * This tutorial check connection with the robot and print received robot
- * cartesian states.
+ * cartesian commands.
  * @copyright Copyright (C) 2016-2024 Flexiv Ltd. All Rights Reserved.
  * @author Flexiv
  */
@@ -38,8 +38,8 @@ void PrintHelp() {
   // clang-format on
 }
 
-/** @brief Print robot Cartesian states data @ 1Hz */
-void printCartesianStates(flexiv::ddk::Client &client) {
+/** @brief Print robot Cartesian commands data @ 1Hz */
+void printCartesianCommands(flexiv::ddk::Client &client) {
   while (keep_running.load()) {
     // Check connection with the robot
     if (!client.connected()) {
@@ -47,10 +47,10 @@ void printCartesianStates(flexiv::ddk::Client &client) {
       std::this_thread::sleep_for(std::chrono::seconds(5));
       continue;
     }
-    // Print all robot states in JSON format using the built-in ostream operator
-    // overloading
-    spdlog::info("Current robot Cartesian states:");
-    std::cout << client.cartesian_states() << std::endl;
+    // Print all robot commands in JSON format using the built-in ostream
+    // operator overloading
+    spdlog::info("Current robot Cartesian commands:");
+    std::cout << client.cartesian_commands() << std::endl;
     std::this_thread::sleep_for(std::chrono::seconds(1));
   }
 }
@@ -70,7 +70,7 @@ int main(int argc, char *argv[]) {
 
   // Print description
   spdlog::info(">>> Tutorial description <<<\nThis tutorial check connection "
-               "with the robot and print received robot cartesian states.");
+               "with the robot and print received robot cartesian commands.");
 
   // Setup signal handler for graceful exit
   std::signal(SIGINT, SignalHandler);
@@ -81,11 +81,11 @@ int main(int argc, char *argv[]) {
     // Instantiate DDK client interface
     flexiv::ddk::Client client(robot_sn);
 
-    // Print States
+    // Print Commands
     // =========================================================================================
     // Use std::thread to do scheduling so that this example can run on all OS
     std::thread low_priority_thread(
-        std::bind(printCartesianStates, std::ref(client)));
+        std::bind(printCartesianCommands, std::ref(client)));
 
     // Properly exit thread
     low_priority_thread.join();

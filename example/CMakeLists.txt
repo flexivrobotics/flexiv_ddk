@@ -20,6 +20,9 @@ set(EXAMPLE_LIST
   basics4_display_primitive_states
   basics5_display_server_time
   basics6_display_system_status
+  basics7_display_joint_commands
+  basics8_display_cartesian_commands
+  basics9_display_manipulability
 )
 
 
