@@ -3,7 +3,7 @@
 ![CMake Badge](https://github.com/flexivrobotics/flexiv_ddk/actions/workflows/cmake.yml/badge.svg)
 [![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://www.apache.org/licenses/LICENSE-2.0.html)
 
-Flexiv DDK (Data Development Kit), a key component of the Flexiv Robotic Software Platform, is a powerful development toolkit that enables the users to access joint states, Cartesian states, primitive states and plan info of Flexiv robots.
+Flexiv DDK (Data Distribution Kit), a key component of the Flexiv Robotic Software Platform, is a powerful development toolkit that enables the users to access joint states, Cartesian states, primitive states and plan info of Flexiv robots.
 
 
 ## Compatibility Overview
@@ -82,11 +82,11 @@ For example:
 
 ## API Documentation
 
-The complete and detailed API documentation of the **latest release** can be found at https://DDK.flexiv.com/api/. The API documentation of a previous release can be generated manually using Doxygen. For example, on Linux:
+The API documentation of a specified release can be generated manually using Doxygen. For example, on Linux:
 
     sudo apt install doxygen-latex graphviz
     cd flexiv_ddk
-    git checkout <previous_release_tag>
+    git checkout <release_tag>
     doxygen doc/Doxyfile.in
 
 The generated API documentation is under ``flexiv_ddk/doc/html/`` directory. Open any html file with your browser to view it.
