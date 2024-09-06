@@ -1,5 +1,5 @@
 /**
- * @example basics3_display_cartesian_states.cpp
+ * @example basics3_display_plan_info.cpp
  * This tutorial check connection with the robot and print current running plan
  * info.
  * @copyright Copyright (C) 2016-2024 Flexiv Ltd. All Rights Reserved.

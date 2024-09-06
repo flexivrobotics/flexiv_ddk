@@ -1,5 +1,5 @@
 /**
- * @example basics2_display_cartesian_commands.cpp
+ * @example basics8_display_cartesian_commands.cpp
  * This tutorial check connection with the robot and print received robot
  * cartesian commands.
  * @copyright Copyright (C) 2016-2024 Flexiv Ltd. All Rights Reserved.

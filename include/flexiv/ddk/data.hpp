@@ -81,7 +81,7 @@ struct JointStates {
 };
 
 /**
- * @struct JointStates
+ * @struct JointCommands
  * @brief Data structure containing the joint-space robot commands.
  */
 struct JointCommands {
@@ -145,18 +145,18 @@ struct CartesianStates {
   std::array<double, kCartDoF> ft_sensor_raw = {};
 
   /**
-   * Estimated external wrench applied on TCP and expressed in TCP frame: \f$
-   * ^{TCP}F_{ext} \in \mathbb{R}^{6 \times 1} \f$. Consists of \f$
-   * \mathbb{R}^{3 \times 1} \f$ force and \f$ \mathbb{R}^{3 \times 1} \f$
+   * Low-pass filtered estimated external wrench applied on TCP and expressed in
+   * TCP frame: \f$ ^{TCP}F_{ext} \in \mathbb{R}^{6 \times 1} \f$. Consists of
+   * \f$ \mathbb{R}^{3 \times 1} \f$ force and \f$ \mathbb{R}^{3 \times 1} \f$
    * moment: \f$ [f_x, f_y, f_z, m_x, m_y, m_z]^T \f$. Unit: \f$ [N]~[Nm] \f$.
    */
   std::array<double, kCartDoF> ext_wrench_in_tcp = {};
 
   /**
-   * Estimated external wrench applied on TCP and expressed in world frame: \f$
-   * ^{0}F_{ext} \in \mathbb{R}^{6 \times 1} \f$. Consists of \f$ \mathbb{R}^{3
-   * \times 1} \f$ force and \f$ \mathbb{R}^{3 \times 1} \f$ moment: \f$ [f_x,
-   * f_y, f_z, m_x, m_y, m_z]^T \f$. Unit: \f$ [N]~[Nm] \f$.
+   * Low-pass filtered estimated external wrench applied on TCP and expressed in
+   * world frame: \f$ ^{O}F_{ext} \in \mathbb{R}^{6 \times 1} \f$. Consists of
+   * \f$ \mathbb{R}^{3 \times 1} \f$ force and \f$ \mathbb{R}^{3 \times 1} \f$
+   * moment: \f$ [f_x, f_y, f_z, m_x, m_y, m_z]^T \f$. Unit: \f$ [N]~[Nm] \f$.
    */
   std::array<double, kCartDoF> ext_wrench_in_world = {};
 
@@ -170,7 +170,7 @@ struct CartesianStates {
 
   /**
    * Raw estimated external wrench applied on TCP and expressed in world frame:
-   * \f$ ^{0}F_{ext} \in \mathbb{R}^{6 \times 1} \f$. Consists of \f$
+   * \f$ ^{O}F_{ext} \in \mathbb{R}^{6 \times 1} \f$. Consists of \f$
    * \mathbb{R}^{3 \times 1} \f$ force and \f$ \mathbb{R}^{3 \times 1} \f$
    * moment: \f$ [f_x, f_y, f_z, m_x, m_y, m_z]^T \f$. Unit: \f$ [N]~[Nm] \f$.
    */
@@ -201,7 +201,7 @@ struct CartesianCommands {
 
   /**
    * Desired wrench applied on TCP and expressed in force control frame: \f$
-   * ^{0}F_{des} \in \mathbb{R}^{6 \times 1} \f$. Consists of \f$ \mathbb{R}^{3
+   * ^{O}F_{des} \in \mathbb{R}^{6 \times 1} \f$. Consists of \f$ \mathbb{R}^{3
    * \times 1} \f$ force and \f$ \mathbb{R}^{3 \times 1} \f$ moment: \f$ [f_x,
    * f_y, f_z, m_x, m_y, m_z]^T \f$. Unit: \f$ [N]~[Nm] \f$.
    */
@@ -232,22 +232,22 @@ struct Manipulability {
 
   /**
    * Gradient of the translational manipulability with respect to joint
-   * positions: \f$ \frac{\partial m_{\text{trans}}}{\partial q} \in
+   * positions: \f$ \frac{\partial {W_t}_{\text{trans}}}{\partial q} \in
    * \mathbb{R}^{n \times 1} \f$. A vector that represents how the translational
    * manipulability changes with small variations in the robot's joint
    * positions. It provides insight into how to modify joint configurations to
    * improve translational manipulability. Unit: \f$
-   * [\text{dimensionless}]~[\text{rad}^{-1}] \f$.
+   * [\text{rad}^{-1}] \f$.
    */
   std::vector<double> translation_gradient = {};
 
   /**
    * Gradient of the rotational manipulability with respect to joint positions:
-   * \f$ \frac{\partial m_{\text{ori}}}{\partial q} \in \mathbb{R}^{n \times 1}
-   * \f$. A vector that represents how the rotational manipulability changes
+   * \f$ \frac{\partial {W_r}_{\text{rot}}}{\partial q} \in \mathbb{R}^{n \times
+   * 1} \f$. A vector that represents how the rotational manipulability changes
    * with small variations in the robot's joint positions. It provides insight
    * into how to modify joint configurations to improve rotational
-   * manipulability. Unit: \f$ [\text{dimensionless}]~[\text{rad}^{-1}] \f$.
+   * manipulability. Unit: \f$ [\text{rad}^{-1}] \f$.
    */
   std::vector<double> rotation_gradient = {};
 };
