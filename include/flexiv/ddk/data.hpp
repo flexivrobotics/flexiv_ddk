@@ -66,13 +66,6 @@ struct JointStates {
   std::vector<double> tau = {};
 
   /**
-   * Desired joint torques: \f$ \tau_{d} \in \mathbb{R}^{n \times 1} \f$.
-   * Compensation of nonlinear dynamics (gravity, centrifugal, and Coriolis) is
-   * excluded. Unit: \f$ [Nm] \f$.
-   */
-  std::vector<double> tau_des = {};
-
-  /**
    * Numerical derivative of measured joint torques: \f$ \dot{\tau} \in
    * \mathbb{R}^{n \times 1} \f$. Unit: \f$ [Nm/s] \f$.
    */
@@ -88,6 +81,31 @@ struct JointStates {
 };
 
 /**
+ * @struct JointStates
+ * @brief Data structure containing the joint-space robot commands.
+ */
+struct JointCommands {
+  /**
+   * Desired joint positions using link-side encoder: \f$ q \in \mathbb{R}^{n
+   * \times 1} \f$. Unit: \f$ [rad] \f$.
+   */
+  std::vector<double> q_des = {};
+
+  /**
+   * Desired joint velocities using link-side encoder: \f$ \dot{q} \in
+   * \mathbb{R}^{n \times 1} \f$. Unit: \f$ [rad/s] \f$.
+   */
+  std::vector<double> dq_des = {};
+
+  /**
+   * Desired joint torques: \f$ \tau_{d} \in \mathbb{R}^{n \times 1} \f$.
+   * Compensation of nonlinear dynamics (gravity, centrifugal, and Coriolis) is
+   * excluded. Unit: \f$ [Nm] \f$.
+   */
+  std::vector<double> tau_des = {};
+};
+
+/**
  * @struct CartesianStates
  * @brief Data structure containing the Cartesian-space robot states.
  */
@@ -99,14 +117,6 @@ struct CartesianStates {
    * q_x, q_y, q_z]^T \f$. Unit: \f$ [m]~[] \f$.
    */
   std::array<double, kPoseSize> tcp_pose = {};
-
-  /**
-   * Desired TCP pose expressed in world frame: \f$ {^{O}T_{TCP}}_{d} \in
-   * \mathbb{R}^{7 \times 1} \f$. Consists of \f$ \mathbb{R}^{3 \times 1} \f$
-   * position and \f$ \mathbb{R}^{4 \times 1} \f$ quaternion: \f$ [x, y, z, q_w,
-   * q_x, q_y, q_z]^T \f$. Unit: \f$ [m]~[] \f$.
-   */
-  std::array<double, kPoseSize> tcp_pose_des = {};
 
   /**
    * Measured TCP velocity expressed in world frame: \f$ ^{O}\dot{X} \in
@@ -149,6 +159,97 @@ struct CartesianStates {
    * f_y, f_z, m_x, m_y, m_z]^T \f$. Unit: \f$ [N]~[Nm] \f$.
    */
   std::array<double, kCartDoF> ext_wrench_in_world = {};
+
+  /**
+   * Raw estimated external wrench applied on TCP and expressed in TCP frame:
+   * \f$ ^{TCP}F_{ext} \in \mathbb{R}^{6 \times 1} \f$. Consists of \f$
+   * \mathbb{R}^{3 \times 1} \f$ force and \f$ \mathbb{R}^{3 \times 1} \f$
+   * moment: \f$ [f_x, f_y, f_z, m_x, m_y, m_z]^T \f$. Unit: \f$ [N]~[Nm] \f$.
+   */
+  std::array<double, kCartDoF> ext_wrench_in_tcp_raw = {};
+
+  /**
+   * Raw estimated external wrench applied on TCP and expressed in world frame:
+   * \f$ ^{0}F_{ext} \in \mathbb{R}^{6 \times 1} \f$. Consists of \f$
+   * \mathbb{R}^{3 \times 1} \f$ force and \f$ \mathbb{R}^{3 \times 1} \f$
+   * moment: \f$ [f_x, f_y, f_z, m_x, m_y, m_z]^T \f$. Unit: \f$ [N]~[Nm] \f$.
+   */
+  std::array<double, kCartDoF> ext_wrench_in_world_raw = {};
+};
+
+/**
+ * @struct CartesianCommands
+ * @brief Data structure containing the Cartesian-space robot commands.
+ */
+struct CartesianCommands {
+  /**
+   * Desired TCP pose expressed in world frame: \f$ {^{O}T_{TCP}}_{d} \in
+   * \mathbb{R}^{7 \times 1} \f$. Consists of \f$ \mathbb{R}^{3 \times 1} \f$
+   * position and \f$ \mathbb{R}^{4 \times 1} \f$ quaternion: \f$ [x, y, z, q_w,
+   * q_x, q_y, q_z]^T \f$. Unit: \f$ [m]~[] \f$.
+   */
+  std::array<double, kPoseSize> tcp_pose_des = {};
+
+  /**
+   * Measured TCP velocity expressed in world frame: \f$ ^{O}\dot{X} \in
+   * \mathbb{R}^{6 \times 1} \f$. Consists of \f$ \mathbb{R}^{3 \times 1} \f$
+   * linear velocity and \f$ \mathbb{R}^{3 \times 1} \f$ angular velocity: \f$
+   * [v_x, v_y, v_z, \omega_x, \omega_y, \omega_z]^T \f$. Unit: \f$
+   * [m/s]~[rad/s] \f$.
+   */
+  std::array<double, kCartDoF> tcp_vel_des = {};
+
+  /**
+   * Desired wrench applied on TCP and expressed in force control frame: \f$
+   * ^{0}F_{des} \in \mathbb{R}^{6 \times 1} \f$. Consists of \f$ \mathbb{R}^{3
+   * \times 1} \f$ force and \f$ \mathbb{R}^{3 \times 1} \f$ moment: \f$ [f_x,
+   * f_y, f_z, m_x, m_y, m_z]^T \f$. Unit: \f$ [N]~[Nm] \f$.
+   */
+  std::array<double, kCartDoF> wrench_des_in_ctrl_frame = {};
+};
+
+/**
+ * @struct Manipulability
+ * @brief Data structure containing indicators of the robot’s manipulability.
+ */
+struct Manipulability {
+  /**
+   * The robot’s current manipulability in translational directions: \f$ W_t
+   * \f$. This is a scalar value that represents the robot's capability to
+   * freely translate its end effector at the current joint configuration. A
+   * higher manipulability measure signifies a broader range of potential
+   * movements.
+   */
+  double translation = {};
+
+  /**
+   * The robot’s current manipulability in rotational directions: \f$ W_r \f$.
+   * This is a scalar value that represents the robot's capability to freely
+   * rotate its end effector at the current joint configuration. A higher
+   * manipulability measure signifies a broader range of potential movements.
+   */
+  double rotation = {};
+
+  /**
+   * Gradient of the translational manipulability with respect to joint
+   * positions: \f$ \frac{\partial m_{\text{trans}}}{\partial q} \in
+   * \mathbb{R}^{n \times 1} \f$. A vector that represents how the translational
+   * manipulability changes with small variations in the robot's joint
+   * positions. It provides insight into how to modify joint configurations to
+   * improve translational manipulability. Unit: \f$
+   * [\text{dimensionless}]~[\text{rad}^{-1}] \f$.
+   */
+  std::vector<double> translation_gradient = {};
+
+  /**
+   * Gradient of the rotational manipulability with respect to joint positions:
+   * \f$ \frac{\partial m_{\text{ori}}}{\partial q} \in \mathbb{R}^{n \times 1}
+   * \f$. A vector that represents how the rotational manipulability changes
+   * with small variations in the robot's joint positions. It provides insight
+   * into how to modify joint configurations to improve rotational
+   * manipulability. Unit: \f$ [\text{dimensionless}]~[\text{rad}^{-1}] \f$.
+   */
+  std::vector<double> rotation_gradient = {};
 };
 
 /**
@@ -293,7 +394,7 @@ std::ostream &operator<<(std::ostream &ostream, const PlanInfo &plan_info);
 std::ostream &operator<<(std::ostream &ostream, const ServerTime &server_time);
 
 /**
- * @brief Operator overloading to out stream all system status in JSON format:
+ * @brief Operator overloading to out stream all system state in JSON format:
  * {"info_1": [val1,val2,val3,...], "info_2": [val1,val2,val3,...], ...}.
  * @param ostream Ostream instance.
  * @param system_state SystemState data structure to out stream.
@@ -302,6 +403,35 @@ std::ostream &operator<<(std::ostream &ostream, const ServerTime &server_time);
 std::ostream &operator<<(std::ostream &ostream,
                          const SystemState &system_state);
 
+/**
+ * @brief Operator overloading to out stream manipulability in JSON format:
+ * {"info_1": [val1,val2,val3,...], "info_2": [val1,val2,val3,...], ...}.
+ * @param ostream Ostream instance.
+ * @param manipulability Manipulability data structure to out stream.
+ * @return Updated ostream instance.
+ */
+std::ostream &operator<<(std::ostream &ostream,
+                         const Manipulability &manipulability);
+
+/**
+ * @brief Operator overloading to out stream Cartesian commands in JSON format:
+ * {"info_1": [val1,val2,val3,...], "info_2": [val1,val2,val3,...], ...}.
+ * @param ostream Ostream instance.
+ * @param cartesian_commands CartesianCommands data structure to out stream.
+ * @return Updated ostream instance.
+ */
+std::ostream &operator<<(std::ostream &ostream,
+                         const CartesianCommands &cartesian_commands);
+
+/**
+ * @brief Operator overloading to out stream joint commands in JSON format:
+ * {"info_1": [val1,val2,val3,...], "info_2": [val1,val2,val3,...], ...}.
+ * @param ostream Ostream instance.
+ * @param joint_commands JointCommands data structure to out stream.
+ * @return Updated ostream instance.
+ */
+std::ostream &operator<<(std::ostream &ostream,
+                         const JointCommands &joint_commands);
 } /* namespace ddk */
 } /* namespace flexiv */
 

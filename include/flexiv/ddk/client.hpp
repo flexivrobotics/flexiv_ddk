@@ -56,6 +56,18 @@ public:
   const CartesianStates cartesian_states() const;
 
   /**
+   * @brief [Non-blocking] Access the current joint-space robot commands.
+   * @return JointCommands value copy.
+   */
+  const JointCommands joint_commands() const;
+
+  /**
+   * @brief [Non-blocking] Access the current Cartesian-space robot commands.
+   * @return CartesianCommands value copy.
+   */
+  const CartesianCommands cartesian_commands() const;
+
+  /**
    * @brief [Blocking] Get detailed information about the currently executing
    * plan. Contains information like plan name, primitive name, node name, node
    * path, node path time period, etc.
@@ -96,7 +108,7 @@ public:
   bool enabling_button_pressed() const;
 
   /**
-   * @brief [Non-blocking] Access the current system state
+   * @brief [Non-blocking] Access the current system state.
    * @return SystemState value copy.
    */
   SystemState system_state() const;
@@ -107,6 +119,12 @@ public:
    * input port index. True: port high, false: port low.
    */
   const std::array<bool, ddk::kIOPorts> digital_inputs(void) const;
+
+  /**
+   * @brief [Non-blocking] Access the current manipulability.
+   * @return Manipulability data copy.
+   */
+  const Manipulability manipulability() const;
 
 private:
   class Impl;
