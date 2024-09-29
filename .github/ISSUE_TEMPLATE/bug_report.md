@@ -10,8 +10,8 @@ assignees: pzhu-flexiv, ZhipengZhang-flexiv
 
 **Version information**
 - DDK: [e.g. v1.0]
-- Robot software: [e.g. v3.6]
-- OS: [e.g. Ubuntu 20.04 - x86_64]
+- Robot software: [e.g. v3.7]
+- OS: [e.g. Ubuntu 22.04 - x86_64]
 
 **Describe the bug**
 A clear and concise description of what the bug is.
