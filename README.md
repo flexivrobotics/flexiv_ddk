@@ -3,7 +3,7 @@
 ![CMake Badge](https://github.com/flexivrobotics/flexiv_ddk/actions/workflows/cmake.yml/badge.svg)
 [![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://www.apache.org/licenses/LICENSE-2.0.html)
 
-Flexiv DDK (Data Distribution Kit), a key component of the Flexiv Robotic Software Platform, is a powerful development toolkit that enables the users to access robot joint states, Cartesian states, system states, joint commands, Cartesian commands, primitive states and plan info of Flexiv robots.
+Flexiv DDK (Data Distribution Kit) is an auxiliary tool that enables the users to obtain realtime data from the robot, including system status, robot states and commands, primitive states, plan info, etc.
 
 
 ## Compatibility Overview
