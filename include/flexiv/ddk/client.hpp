@@ -108,12 +108,6 @@ public:
   bool enabling_button_pressed() const;
 
   /**
-   * @brief [Non-blocking] Access the current system state.
-   * @return SystemState value copy.
-   */
-  SystemState system_state() const;
-
-  /**
    * @brief [Non-blocking] Read all digital input ports on the control box.
    * @return Digital input readings array whose index corresponds to the digital
    * input port index. True: port high, false: port low.

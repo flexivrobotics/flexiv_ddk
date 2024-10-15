@@ -292,70 +292,6 @@ struct ServerTime {
 };
 
 /**
- * @enum SystemState
- * @brief Enum data to indicate current system state
- */
-enum class SystemState {
-  ST_UNKNOWN = 0,
-  ST_INIT,
-  ST_STOPPED_MANUAL,
-  ST_STOPPED_AUTO,
-  ST_STOPPED_EXTERNAL_AUTO,
-  ST_WORKING_EXTERNAL_AUTO,
-  ST_WORKING_MANUAL_EXECUTE,
-  ST_WORKING_AUTO_EXECUTE,
-  ST_REWIND_EXTERNAL_AUTO,
-  ST_REWIND_MANUAL,
-  ST_REWIND_AUTO,
-  ST_FREEDRIVE_MANUAL,
-  ST_FREEDRIVE_AUTO,
-  ST_FAULT_MANUAL,
-  ST_FAULT_AUTO,
-  ST_FAULT_EXTERNAL_AUTO,
-  ST_RECOVERY_MANUAL,
-  ST_RECOVERY_AUTO,
-  ST_RECOVERY_EXTERNAL_AUTO,
-  ST_NUM
-};
-
-/**
- * @brief String array for showing the system state
- */
-constexpr std::array<const char *, static_cast<size_t>(SystemState::ST_NUM)>
-    SystemStateNames = {"ST_UNKNOWN",
-                        "ST_INIT",
-                        "ST_STOPPED_MANUAL",
-                        "ST_STOPPED_AUTO",
-                        "ST_STOPPED_EXTERNAL_AUTO",
-                        "ST_WORKING_EXTERNAL_AUTO",
-                        "ST_WORKING_MANUAL_EXECUTE",
-                        "ST_WORKING_AUTO_EXECUTE",
-                        "ST_REWIND_EXTERNAL_AUTO",
-                        "ST_REWIND_MANUAL",
-                        "ST_REWIND_AUTO",
-                        "ST_FREEDRIVE_MANUAL",
-                        "ST_FREEDRIVE_AUTO",
-                        "ST_FAULT_MANUAL",
-                        "ST_FAULT_AUTO",
-                        "ST_FAULT_EXTERNAL_AUTO",
-                        "ST_RECOVERY_MANUAL",
-                        "ST_RECOVERY_AUTO",
-                        "ST_RECOVERY_EXTERNAL_AUTO"};
-
-/**
- * @brief Get the name of the system state.
- * @param state The system state.
- * @return The name of the system state.
- */
-constexpr const char *getSystemStateName(SystemState state) {
-  auto index = static_cast<size_t>(state);
-  if (index < SystemStateNames.size()) {
-    return SystemStateNames[index];
-  }
-  return "UNKNOWN";
-}
-
-/**
  * @brief Operator overloading to out stream all robot states in JSON format:
  * {"state_1": [val1,val2,val3,...], "state_2": [val1,val2,val3,...], ...}.
  * @param[in] ostream Ostream instance.
@@ -392,16 +328,6 @@ std::ostream &operator<<(std::ostream &ostream, const PlanInfo &plan_info);
  * @return Updated ostream instance.
  */
 std::ostream &operator<<(std::ostream &ostream, const ServerTime &server_time);
-
-/**
- * @brief Operator overloading to out stream all system state in JSON format:
- * {"info_1": [val1,val2,val3,...], "info_2": [val1,val2,val3,...], ...}.
- * @param ostream Ostream instance.
- * @param system_state SystemState data structure to out stream.
- * @return Updated ostream instance.
- */
-std::ostream &operator<<(std::ostream &ostream,
-                         const SystemState &system_state);
 
 /**
  * @brief Operator overloading to out stream manipulability in JSON format:

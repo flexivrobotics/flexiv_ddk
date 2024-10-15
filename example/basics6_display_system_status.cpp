@@ -56,9 +56,6 @@ void printSystemStatus(flexiv::ddk::Client &client) {
     std::cout << "Enabling button released states: "
               << client.enabling_button_pressed() << std::endl;
 
-    std::cout << "Current system states: "
-              << getSystemStateName(client.system_state()) << std::endl;
-
     std::this_thread::sleep_for(std::chrono::seconds(1));
   }
 }
