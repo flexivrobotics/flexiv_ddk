@@ -15,9 +15,8 @@ else
 fi
 
 # Use specific version
-git fetch -p
-git checkout 3.3.7
-git submodule update --init --recursive
+git fetch --prune --tags
+git checkout 3.4.0
 
 # Configure CMake
 mkdir -p build && cd build
