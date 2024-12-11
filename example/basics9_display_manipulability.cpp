@@ -70,7 +70,7 @@ int main(int argc, char *argv[]) {
 
   // Print description
   spdlog::info(">>> Tutorial description <<<\nThis tutorial check connection "
-               "with the robot and print received robot cartesian commands.");
+               "with the robot and print current manipulability.");
 
   // Setup signal handler for graceful exit
   std::signal(SIGINT, SignalHandler);
