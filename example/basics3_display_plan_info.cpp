@@ -73,14 +73,13 @@ int main(int argc, char *argv[]) {
   spdlog::info(">>> Tutorial description <<<\nThis tutorial check connection "
                "with the robot and print plan info.");
 
+  // Setup signal handler for graceful exit
+  std::signal(SIGINT, SignalHandler);
   try {
     // DDK Initialization
     // =========================================================================================
     // Instantiate DDK client interface
     flexiv::ddk::Client client(robot_sn);
-
-    // Setup signal handler for graceful exit
-    std::signal(SIGINT, SignalHandler);
 
     // Print States
     // =========================================================================================
