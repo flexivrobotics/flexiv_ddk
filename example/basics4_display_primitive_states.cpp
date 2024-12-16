@@ -46,17 +46,13 @@ void printPrimitiveStates(flexiv::ddk::Client &client) {
       std::this_thread::sleep_for(std::chrono::seconds(5));
       continue;
     }
-    // Print all robot states in JSON format using the built-in ostream operator
-    // overloading
+    // Print all robot states
     spdlog::info("Current primitive states:");
-    std::cout << "primitiveName= "
-              << flexiv::ddk::utility::ParsePtStates(client.primitive_states(),
-                                                     "primitiveName")
-              << std::endl;
-    std::cout << "reachedTarget= "
-              << flexiv::ddk::utility::ParsePtStates(client.primitive_states(),
-                                                     "reachedTarget")
-              << std::endl;
+    for (const auto &pt : client.primitive_states()) {
+      std::cout << pt.first << " = ";
+      std::visit([](auto &&arg) { std::cout << arg; }, pt.second);
+      std::cout << std::endl;
+    }
     std::this_thread::sleep_for(std::chrono::seconds(1));
   }
 }
@@ -76,7 +72,7 @@ int main(int argc, char *argv[]) {
 
   // Print description
   spdlog::info(">>> Tutorial description <<<\nThis tutorial check connection "
-               "with the robot and print plan infos.");
+               "with the robot and print primitive states.");
 
   try {
     // DDK Initialization

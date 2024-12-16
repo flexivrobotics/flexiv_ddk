@@ -10,8 +10,8 @@
 #include <array>
 #include <ostream>
 #include <string>
+#include <variant>
 #include <vector>
-
 namespace flexiv {
 namespace ddk {
 
@@ -21,8 +21,9 @@ constexpr size_t kCartDoF = 6;
 /** Size of pose array (3 position + 4 quaternion) */
 constexpr size_t kPoseSize = 7;
 
-/** Number of digital IO ports */
-constexpr size_t kIOPorts = 16;
+/** Number of digital IO ports (16 on control box + 2 inside the wrist
+ * connector) */
+constexpr size_t kIOPorts = 18;
 
 /**
  * @struct JointStates
@@ -290,6 +291,10 @@ struct ServerTime {
   /** Number of nanoseconds since last full second */
   int nano_sec = {};
 };
+
+/** Alias of the variant that holds all possible types of flexiv primitive
+ * states */
+using FlexivPrimitiveStatesType = std::variant<int, double, std::string>;
 
 /**
  * @brief Operator overloading to out stream all robot states in JSON format:

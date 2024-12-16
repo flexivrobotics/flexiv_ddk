@@ -3,7 +3,7 @@ cmake_minimum_required(VERSION 3.16.3)
 # ===================================================================
 #      PROJECT SETUP
 # ===================================================================
-project(flexiv_ddk VERSION 1.0.0)
+project(flexiv_ddk VERSION 1.0.1)
 
 # Configure build type
 if(NOT CMAKE_BUILD_TYPE)
