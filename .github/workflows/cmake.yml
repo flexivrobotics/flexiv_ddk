@@ -27,7 +27,7 @@ jobs:
           bash build_and_install_dependencies.sh ~/ddk_install $(nproc)
 
       - name: Build and install library
-        # Configure CMake, then build and install the flexiv_rdk INTERFACE library to DDK installation directory.
+        # Configure CMake, then build and install the flexiv_ddk INTERFACE library to DDK installation directory.
         run: |
           cd ${{github.workspace}}
           mkdir -p build && cd build
@@ -35,7 +35,7 @@ jobs:
           make install
 
       - name: Build examples
-        # Find and link to the flexiv_rdk INTERFACE library, then build all examples.
+        # Find and link to the flexiv_ddk INTERFACE library, then build all examples.
         run: |
           cd ${{github.workspace}}/example
           mkdir -p build && cd build
@@ -43,7 +43,7 @@ jobs:
           make -j$(nproc)
 
       # - name: Build tests
-      #   # Find and link to the flexiv_rdk INTERFACE library, then build all tests.
+      #   # Find and link to the flexiv_ddk INTERFACE library, then build all tests.
       #   run: |
       #     cd ${{github.workspace}}/test
       #     mkdir -p build && cd build
@@ -65,7 +65,7 @@ jobs:
           bash build_and_install_dependencies.sh ~/ddk_install $(nproc)
 
       - name: Build and install library
-        # Configure CMake, then build and install the flexiv_rdk INTERFACE library to DDK installation directory.
+        # Configure CMake, then build and install the flexiv_ddk INTERFACE library to DDK installation directory.
         run: |
           cd ${{github.workspace}}
           mkdir -p build && cd build
@@ -73,7 +73,7 @@ jobs:
           make install
 
       - name: Build examples
-        # Find and link to the flexiv_rdk INTERFACE library, then build all examples.
+        # Find and link to the flexiv_ddk INTERFACE library, then build all examples.
         run: |
           cd ${{github.workspace}}/example
           mkdir -p build && cd build
@@ -81,7 +81,7 @@ jobs:
           make -j$(nproc)
 
       # - name: Build tests
-      #   # Find and link to the flexiv_rdk INTERFACE library, then build all tests.
+      #   # Find and link to the flexiv_ddk INTERFACE library, then build all tests.
       #   run: |
       #     cd ${{github.workspace}}/test
       #     mkdir -p build && cd build
@@ -103,7 +103,7 @@ jobs:
   #         bash build_and_install_dependencies.sh ~/ddk_install $(sysctl -n hw.ncpu)
 
   #     - name: Build and install library
-  #       # Configure CMake, then build and install the flexiv_rdk INTERFACE library to DDK installation directory.
+  #       # Configure CMake, then build and install the flexiv_ddk INTERFACE library to DDK installation directory.
   #       run: |
   #         cd ${{github.workspace}}
   #         mkdir -p build && cd build
@@ -111,7 +111,7 @@ jobs:
   #         make install
 
   #     - name: Build examples
-  #       # Find and link to the flexiv_rdk INTERFACE library, then build all examples.
+  #       # Find and link to the flexiv_ddk INTERFACE library, then build all examples.
   #       run: |
   #         cd ${{github.workspace}}/example
   #         mkdir -p build && cd build
@@ -119,7 +119,7 @@ jobs:
   #         make -j$(sysctl -n hw.ncpu)
 
   #     - name: Build tests
-  #       # Find and link to the flexiv_rdk INTERFACE library, then build all tests.
+  #       # Find and link to the flexiv_ddk INTERFACE library, then build all tests.
   #       run: |
   #         cd ${{github.workspace}}/test
   #         mkdir -p build && cd build
@@ -141,7 +141,7 @@ jobs:
           bash build_and_install_dependencies.sh ~/ddk_install $(nproc)
 
       - name: Build and install library
-        # Configure CMake, then build and install the flexiv_rdk INTERFACE library to DDK installation directory.
+        # Configure CMake, then build and install the flexiv_ddk INTERFACE library to DDK installation directory.
         run: |
           cd ${{github.workspace}}
           mkdir build && cd build
@@ -149,7 +149,7 @@ jobs:
           cmake --build . --target install --config Release
 
       - name: Build examples
-        # Find and link to the flexiv_rdk INTERFACE library, then build all examples.
+        # Find and link to the flexiv_ddk INTERFACE library, then build all examples.
         run: |
           cd ${{github.workspace}}/example
           mkdir build && cd build
