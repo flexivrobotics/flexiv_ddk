@@ -1,6 +1,6 @@
 /**
  * @file client.hpp
- * @copyright Copyright (C) 2016-2024 Flexiv Ltd. All Rights Reserved.
+ * @copyright Copyright (C) 2016-2025 Flexiv Ltd. All Rights Reserved.
  */
 
 #ifndef FLEXIV_DDK_CLIENT_HPP_
@@ -87,19 +87,6 @@ public:
   const PlanInfo plan_info() const;
 
   /**
-   * @brief [Blocking] Get feedback states of the currently executing primitive.
-   * @return Primitive states in the format of a string list.
-   * @throw std::runtime_error if failed to get a reply from the connected robot
-   * or the result is invalid.
-   * @note This function blocks until a reply is received.
-   */
-  [[deprecated(
-      "[Will be removed in flexiv_ddk v1.1] Use the other primitive_states() "
-      "instead")]] const std::vector<std::string>
-  primitive_states(bool dummy)
-      const; ///< Unused parameter [dummy] is needed for function overloading
-
-  /**
    * @brief [Blocking] State parameters of the executing primitive and their
    * current values.
    * @return A map of {pt_state_name, pt_state_value(s)}. Booleans are
@@ -139,7 +126,7 @@ public:
   const std::array<bool, ddk::kIOPorts> digital_inputs(void) const;
 
   /**
-   * @brief [Non-blocking] Access the current manipulability.
+   * @brief [Blocking] Access the current manipulability.
    * @return Manipulability data copy.
    */
   const Manipulability manipulability() const;
