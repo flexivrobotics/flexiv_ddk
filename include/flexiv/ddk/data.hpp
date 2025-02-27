@@ -27,56 +27,95 @@ constexpr size_t kIOPorts = 18;
 
 /**
  * @struct JointStates
- * @brief Data structure containing the joint-space robot states.
+ * @brief Data structure containing the joint-space states of manipulator and
+ * external axes (if any).
  */
 struct JointStates {
   /**
-   * Measured joint positions using link-side encoder: \f$ q \in \mathbb{R}^{n
-   * \times 1} \f$. This is the direct measurement of joint positions, preferred
-   * for most cases. Unit: \f$ [rad] \f$.
+   * Measured joint positions of the full system using link-side encoder: \f$ q
+   * \in \mathbb{R}^{n \times 1} \f$. This is the direct measurement of joint
+   * positions. Unit: \f$ [rad] or [m] \f$.
+   * @note This contains values for both the external axes (if any) and the
+   * robot manipulator. If there is an external axis, the joint data of the
+   * external axis is in front of the vector, and the joint data of the
+   * manipulator is appended at the end.
+   * @note If a joint has only one encoder, then \f$ \theta = q \f$.
    */
   std::vector<double> q = {};
 
   /**
-   * Measured joint positions using motor-side encoder: \f$ \theta \in
-   * \mathbb{R}^{n \times 1} \f$. This is the indirect measurement of joint
-   * positions. \f$ \theta = q + \Delta \f$, where \f$ \Delta \f$ is the joint's
-   * internal deflection between motor and link. Unit: \f$ [rad] \f$.
+   * Measured joint positions of the full system using motor-side encoder: \f$
+   * \theta \in \mathbb{R}^{n \times 1} \f$. This is the indirect measurement of
+   * joint positions. \f$ \theta = q + \Delta \f$, where \f$ \Delta \f$ is the
+   * joint's internal deflection between motor and link. Unit: \f$ [rad] or [m]
+   * \f$.
+   * @note This contains values for both the external axes (if any) and the
+   * robot manipulator. If there is an external axis, the joint data of the
+   * external axis is in front of the vector, and the joint data of the
+   * manipulator is appended at the end.
+   * @note If a joint has only one encoder, then \f$ \theta = q \f$.
    */
   std::vector<double> theta = {};
 
   /**
-   * Measured joint velocities using link-side encoder: \f$ \dot{q} \in
-   * \mathbb{R}^{n \times 1} \f$. This is the direct but more noisy measurement
-   * of joint velocities. Unit: \f$ [rad/s] \f$.
+   * Measured joint velocities of the full system using link-side encoder: \f$
+   * \dot{q} \in \mathbb{R}^{n \times 1} \f$. This is the direct but more noisy
+   * measurement of joint velocities. Unit: \f$ [rad/s] or [m/s] \f$.
+   * @note This contains values for both the external axes (if any) and the
+   * robot manipulator. If there is an external axis, the joint data of the
+   * external axis is in front of the vector, and the joint data of the
+   * manipulator is appended at the end.
+   * @note If a joint has only one encoder, then \f$ \dot{\theta} = \dot{q} \f$.
    */
   std::vector<double> dq = {};
 
   /**
-   * Measured joint velocities using motor-side encoder: \f$ \dot{\theta} \in
-   * \mathbb{R}^{n \times 1} \f$. This is the indirect but less noisy
-   * measurement of joint velocities, preferred for most cases. Unit: \f$
-   * [rad/s] \f$.
+   * Measured joint velocities of the full system using motor-side encoder: \f$
+   * \dot{\theta} \in \mathbb{R}^{n \times 1} \f$. This is the indirect but less
+   * noisy measurement of joint velocities. Unit: \f$ [rad/s] or [m/s] \f$.
+   * @note This contains values for both the external axes (if any) and the
+   * robot manipulator. If there is an external axis, the joint data of the
+   * external axis is in front of the vector, and the joint data of the
+   * manipulator is appended at the end.
+   * @note If a joint has only one encoder, then \f$ \dot{\theta} = \dot{q} \f$.
    */
   std::vector<double> dtheta = {};
 
   /**
-   * Measured joint torques: \f$ \tau \in \mathbb{R}^{n \times 1} \f$. Unit: \f$
-   * [Nm] \f$.
+   * Measured joint torques of the full system: \f$ \tau \in \mathbb{R}^{n
+   * \times 1} \f$. Unit: \f$ [Nm] \f$.
+   * @note This contains values for both the external axes (if any) and the
+   * robot manipulator. If there is an external axis, the joint data of the
+   * external axis is in front of the vector, and the joint data of the
+   * manipulator is appended at the end.
+   * @note If a joint has no torque measurement, then the corresponding value
+   * will be 0.
    */
   std::vector<double> tau = {};
 
   /**
-   * Numerical derivative of measured joint torques: \f$ \dot{\tau} \in
-   * \mathbb{R}^{n \times 1} \f$. Unit: \f$ [Nm/s] \f$.
+   * Numerical derivative of measured joint torques of the full system: \f$
+   * \dot{\tau} \in \mathbb{R}^{n \times 1} \f$. Unit: \f$ [Nm/s] \f$.
+   * @note This contains values for both the external axes (if any) and the
+   * robot manipulator. If there is an external axis, the joint data of the
+   * external axis is in front of the vector, and the joint data of the
+   * manipulator is appended at the end.
+   * @note If a joint has no torque measurement, then the corresponding value
+   * will be 0.
    */
   std::vector<double> tau_dot = {};
 
   /**
-   * Estimated external joint torques: \f$ \hat \tau_{ext} \in \mathbb{R}^{n
-   * \times 1} \f$. Produced by any external contact (with robot body or
-   * end-effector) that does not belong to the known robot model. Unit: \f$ [Nm]
-   * \f$.
+   * Estimated external joint torques of the full system: \f$ \hat \tau_{ext}
+   * \in \mathbb{R}^{n \times 1} \f$. Produced by any external contact (with
+   * robot body or end-effector) that does not belong to the known robot model.
+   * Unit: \f$ [Nm] \f$.
+   * @note This contains values for both the external axes (if any) and the
+   * robot manipulator. If there is an external axis, the joint data of the
+   * external axis is in front of the vector, and the joint data of the
+   * manipulator is appended at the end.
+   * @note If a joint has no torque measurement, then the corresponding value
+   * will be 0.
    */
   std::vector<double> tau_ext = {};
 };
@@ -87,21 +126,36 @@ struct JointStates {
  */
 struct JointCommands {
   /**
-   * Desired joint positions using link-side encoder: \f$ q \in \mathbb{R}^{n
-   * \times 1} \f$. Unit: \f$ [rad] \f$.
+   * Desired joint positions of the full system using link-side encoder: \f$
+   * q_{d} \in \mathbb{R}^{n \times 1} \f$. Unit: \f$ [rad] or [m] \f$.
+   * @note This contains values for both the external axes (if any) and the
+   * robot manipulator. If there is an external axis, the joint data of the
+   * external axis is in front of the vector, and the joint data of the
+   * manipulator is appended at the end.
    */
   std::vector<double> q_des = {};
 
   /**
-   * Desired joint velocities using link-side encoder: \f$ \dot{q} \in
-   * \mathbb{R}^{n \times 1} \f$. Unit: \f$ [rad/s] \f$.
+   * Desired joint velocities of the full system using link-side encoder: \f$
+   * \dot{q}_{d} \in \mathbb{R}^{n \times 1} \f$. Unit: \f$ [rad/s] or [m/s]
+   * \f$.
+   * @note This contains values for both the external axes (if any) and the
+   * robot manipulator. If there is an external axis, the joint data of the
+   * external axis is in front of the vector, and the joint data of the
+   * manipulator is appended at the end.
    */
   std::vector<double> dq_des = {};
 
   /**
-   * Desired joint torques: \f$ \tau_{d} \in \mathbb{R}^{n \times 1} \f$.
-   * Compensation of nonlinear dynamics (gravity, centrifugal, and Coriolis) is
-   * excluded. Unit: \f$ [Nm] \f$.
+   * Desired joint torques of the full system: \f$ \tau_{d} \in \mathbb{R}^{n
+   * \times 1} \f$. Compensation of nonlinear dynamics (gravity, centrifugal,
+   * and Coriolis) is excluded. Unit: \f$ [Nm] \f$.
+   * @note This contains values for both the external axes (if any) and the
+   * robot manipulator. If there is an external axis, the joint data of the
+   * external axis is in front of the vector, and the joint data of the
+   * manipulator is appended at the end.
+   * @note If a joint has no torque control capability, then the corresponding
+   * value will be 0.
    */
   std::vector<double> tau_des = {};
 };
@@ -214,6 +268,15 @@ struct CartesianCommands {
  * @brief Data structure containing indicators of the robot’s manipulability.
  */
 struct Manipulability {
+
+  /**
+   *  Score of the robot's current configuration {translation_score,
+   * orientation_score}. It's the same as the configuration score shown in the
+   * Elements. The quality of configuration based on score is mapped as: poor =
+   * [0, 20), medium = [20, 40), good = [40, 100].
+   */
+  std::pair<double, double> configuration_score = {};
+
   /**
    * The robot’s current manipulability in translational directions: \f$ W_t
    * \f$. This is a scalar value that represents the robot's capability to
