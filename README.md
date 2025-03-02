@@ -80,11 +80,18 @@ For example:
     ./basics1_display_joint_states Rizon4s-123456
 
 ### Python DDK
+1. Install Python 3.8, 3.10 or 3.12 via Microsoft Store or other means.
 
-1. To run an example Python program:
+2. Install spdlog with specific python version:
+        
+        python3.8 -m pip install spdlog
+        python3.10 -m pip install spdlog
+        python3.12 -m pip install spdlog
+
+3. To run an example Python program:
 
         cd flexiv_ddk/example_py
-        python3 <program_name>.py [robot_serial_number]
+        python3.x <program_name>.py [robot_serial_number]
 
 ## API Documentation
 
