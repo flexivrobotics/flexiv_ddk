@@ -54,25 +54,25 @@ public:
    * @brief [Non-blocking] Access the current joint-space robot states.
    * @return JointStates value copy.
    */
-  const JointStates joint_states() const;
+  JointStates joint_states() const;
 
   /**
    * @brief [Non-blocking] Access the current Cartesian-space robot states.
    * @return CartesianStates value copy.
    */
-  const CartesianStates cartesian_states() const;
+  CartesianStates cartesian_states() const;
 
   /**
    * @brief [Non-blocking] Access the current joint-space robot commands.
    * @return JointCommands value copy.
    */
-  const JointCommands joint_commands() const;
+  JointCommands joint_commands() const;
 
   /**
    * @brief [Non-blocking] Access the current Cartesian-space robot commands.
    * @return CartesianCommands value copy.
    */
-  const CartesianCommands cartesian_commands() const;
+  CartesianCommands cartesian_commands() const;
 
   /**
    * @brief [Blocking] Get detailed information about the currently executing
@@ -84,7 +84,7 @@ public:
    * robot.
    * @note This function blocks until a reply is received.
    */
-  const PlanInfo plan_info() const;
+  PlanInfo plan_info() const;
 
   /**
    * @brief [Blocking] State parameters of the executing primitive and their
@@ -103,7 +103,7 @@ public:
    * current seconds since epoch and nanoseconds since last full second
    * @return ServerTime value copy.
    */
-  const ddk::ServerTime &server_time(void) const;
+  ddk::ServerTime server_time(void) const;
 
   /**
    * @brief [Non-blocking] Whether the emergency stop is released.
@@ -123,13 +123,13 @@ public:
    * @return Digital input readings array whose index corresponds to the digital
    * input port index. True: port high, false: port low.
    */
-  const std::array<bool, ddk::kIOPorts> digital_inputs(void) const;
+  std::array<bool, ddk::kIOPorts> digital_inputs(void) const;
 
   /**
    * @brief [Blocking] Access the current manipulability.
    * @return Manipulability data copy.
    */
-  const Manipulability manipulability() const;
+  Manipulability manipulability() const;
 
 private:
   class Impl;
