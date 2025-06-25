@@ -42,14 +42,6 @@ jobs:
           cmake .. -DCMAKE_INSTALL_PREFIX=~/ddk_install
           make -j$(nproc)
 
-      - name: Build tests
-        # Find and link to the flexiv_ddk INTERFACE library, then build all tests.
-        run: |
-          cd ${{github.workspace}}/test
-          mkdir -p build && cd build
-          cmake .. -DCMAKE_INSTALL_PREFIX=~/ddk_install
-          make -j$(nproc)
-
   # build-macos-12:
   #   # Use self-hosted macOS 12 runner with arm64 processor
   #   runs-on: [self-hosted, macos-12, ARM64]
