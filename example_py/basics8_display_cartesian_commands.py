@@ -12,13 +12,7 @@ import time
 import argparse
 import threading
 import spdlog  # pip install spdlog
-
-# Import Flexiv DDK Python library
-# fmt: off
-import sys
-sys.path.insert(0, "../lib_py")
-import flexivddk
-# fmt: on
+import flexivddk # pip install flexivddk
 
 
 

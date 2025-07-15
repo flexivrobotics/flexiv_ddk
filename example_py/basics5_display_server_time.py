@@ -13,13 +13,7 @@ import argparse
 import threading
 import spdlog  # pip install spdlog
 from datetime import datetime
-
-# Import Flexiv DDK Python library
-# fmt: off
-import sys
-sys.path.insert(0, "../lib_py")
-import flexivddk
-# fmt: on
+import flexivddk # pip install flexivddk
 
 
 def convert_to_datetime_string(sec_since_epoch: int, nano_sec_since_full_sec: int,
