@@ -15,10 +15,43 @@ Flexiv DDK (Data Distribution Kit) is an auxiliary tool that enables the users t
 ## Quick Start
 
 The **C++** DDK libraries are packed into a unified modern CMake project named ``flexiv_ddk``, which can be configured and installed via CMake on all supported OS.
-
+The **Python** DDK library is a Python package that can be installed via pip.
 ### Note
 
 * You might need to turn off your computer's firewall or whitelist the DDK programs to be able to establish connection with the robot.
+
+## Quick Start - Python
+
+### Install the Python package
+
+On all supported platforms, the Python package of DDK and its dependencies for a specific Python version can be installed using the `pip` module:
+
+    python3.x -m pip install spdlog flexivddk
+
+NOTE: replace `3.x` with a specific Python version.
+
+### Use the installed Python package
+
+After the ``flexivddk`` Python package is installed, it can be imported from any Python script. Test with the following commands in a new Terminal, which should start Flexiv DDK:
+
+    python3.x
+    import flexivddk
+    robot = flexivddk.Client("Rizon4-123456")
+
+The program will start searching for a robot with serial number `Rizon4-123456`, and will exit after a couple of seconds if the specified robot is not found in the local network.
+
+### Run example Python scripts
+
+To run an example Python script in this repo:
+
+    cd flexiv_ddk/example_py
+    python3.x <example_name>.py [robot_serial_number]
+
+For example:
+
+    python3.10 ./basics1_display_joint_states.py Rizon4-123456
+
+## Quick Start - C++ 
 
 ### Install on Linux
 
@@ -57,18 +90,18 @@ The **C++** DDK libraries are packed into a unified modern CMake project named `
 3. Install bash emulator: Download and install [Git for Windows](https://git-scm.com/download/win/), which comes with a bash emulator Git Bash.
 4. Within the bash emulator, the rest are identical to steps 2 and below in [Install on Linux](#install-on-linux).
 
-### Link to DDK from a user program
+### Use the installed C++ library
 
 After DDK is installed, it can be found as a CMake library and linked to by other CMake projects. Use the provided examples project for instance::
 
     cd flexiv_ddk/example
     mkdir build && cd build
-    cmake .. -DCMAKE_INSTALL_PREFIX=~/ddk_install
+    cmake .. -DCMAKE_PREFIX_PATH=~/ddk_install
     cmake --build . --config Release -j 4
 
 NOTE: ``-D`` followed by ``CMAKE_INSTALL_PREFIX`` tells the user project's CMake where to find the installed DDK library. The instruction above applies to all supported OS.
 
-### Run example programs
+### Run example C++ programs
 
 To run a compiled example C++ program:
 
@@ -78,20 +111,6 @@ To run a compiled example C++ program:
 For example:
 
     ./basics1_display_joint_states Rizon4s-123456
-
-### Python DDK
-1. Install Python 3.8, 3.10 or 3.12 via Microsoft Store or other means.
-
-2. Install spdlog with specific python version:
-        
-        python3.8 -m pip install spdlog
-        python3.10 -m pip install spdlog
-        python3.12 -m pip install spdlog
-
-3. To run an example Python program:
-
-        cd flexiv_ddk/example_py
-        python3.x <program_name>.py [robot_serial_number]
 
 ## API Documentation
 
