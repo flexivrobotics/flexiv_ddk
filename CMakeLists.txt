@@ -3,7 +3,7 @@ cmake_minimum_required(VERSION 3.16.3)
 # ===================================================================
 #      PROJECT SETUP
 # ===================================================================
-project(flexiv_ddk VERSION 1.1)
+project(flexiv_ddk VERSION 1.2.0)
 
 # Configure build type
 if(NOT CMAKE_BUILD_TYPE)
@@ -59,6 +59,7 @@ if(spdlog_FOUND)
 endif()
 
 # Fast-DDS (Fast-RTPS)
+set(OPENSSL_USE_STATIC_LIBS ON)
 find_package(fastrtps 2.6.2 REQUIRED)
 if(fastrtps_FOUND)
   message(STATUS "Found fastrtps: ${fastrtps_DIR}")

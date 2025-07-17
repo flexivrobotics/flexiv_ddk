@@ -55,6 +55,11 @@ void printSystemStatus(flexiv::ddk::Client &client) {
 
     std::cout << "Enabling button released states: "
               << client.enabling_button_pressed() << std::endl;
+    std::cout << "Digital inputs: ";
+    for (size_t i = 0; i < flexiv::ddk::kIOPorts; i++) {
+      std::cout << client.digital_inputs()[i] << " ";
+    }
+    std::cout << "\n";
 
     std::this_thread::sleep_for(std::chrono::seconds(1));
   }
