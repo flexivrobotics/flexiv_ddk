@@ -27,7 +27,7 @@ set(EXAMPLE_LIST
 
 
 # Find flexiv_ddk INTERFACE library
-find_package(flexiv_ddk 1.2.0 EXACT REQUIRED)
+find_package(flexiv_ddk 1.3.0 EXACT REQUIRED)
 if(flexiv_ddk_FOUND)
   message(STATUS "Found flexiv_ddk: ${flexiv_ddk_DIR}, version:${flexiv_ddk_VERSION}")
 endif()
