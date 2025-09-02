@@ -118,6 +118,16 @@ struct JointStates {
    * will be 0.
    */
   std::vector<double> tau_ext = {};
+
+  /**
+   * Measured joint temperatures of the full system: \f$ temperature \in
+   * \mathbb{R}^{n \times 1} \f$. Unit: \f$ [°C] \f$.
+   * @note This contains values for both the external axes (if any) and the
+   * robot manipulator.
+   * @note If a joint has no temperature measurement, the corresponding value
+   * will be 0.
+   */
+  std::vector<double> temperature = {};
 };
 
 /**
