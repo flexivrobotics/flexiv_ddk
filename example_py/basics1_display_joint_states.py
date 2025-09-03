@@ -33,6 +33,7 @@ def print_joint_states(client, logger, stop_event):
         print(f"tau: {['%.2f' % i for i in client.joint_states().tau]}")
         print(f"tau_dot: {['%.2f' % i for i in client.joint_states().tau_dot]}")
         print(f"tau_ext: {['%.2f' % i for i in client.joint_states().tau_ext]}")
+        print(f"temperature: {['%.2f' % i for i in client.joint_states().temperature]}")
         print("}", flush= True)
         # fmt: on
 
