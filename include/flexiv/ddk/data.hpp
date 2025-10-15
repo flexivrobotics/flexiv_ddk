@@ -12,6 +12,7 @@
 #include <string>
 #include <variant>
 #include <vector>
+
 namespace flexiv {
 namespace ddk {
 
@@ -27,18 +28,16 @@ constexpr size_t kIOPorts = 18;
 
 /**
  * @struct JointStates
- * @brief Data structure containing the joint-space states of manipulator and
- * external axes (if any).
+ * @brief Joint-space states data of the external axes (if any) and the robot
+ * manipulator.
+ * @note If external axes exist, the corresponding data will be at the front of
+ * the vectors.
  */
 struct JointStates {
   /**
    * Measured joint positions of the full system using link-side encoder: \f$ q
    * \in \mathbb{R}^{n \times 1} \f$. This is the direct measurement of joint
    * positions. Unit: \f$ [rad] or [m] \f$.
-   * @note This contains values for both the external axes (if any) and the
-   * robot manipulator. If there is an external axis, the joint data of the
-   * external axis is in front of the vector, and the joint data of the
-   * manipulator is appended at the end.
    * @note If a joint has only one encoder, then \f$ \theta = q \f$.
    */
   std::vector<double> q = {};
@@ -49,10 +48,6 @@ struct JointStates {
    * joint positions. \f$ \theta = q + \Delta \f$, where \f$ \Delta \f$ is the
    * joint's internal deflection between motor and link. Unit: \f$ [rad] or [m]
    * \f$.
-   * @note This contains values for both the external axes (if any) and the
-   * robot manipulator. If there is an external axis, the joint data of the
-   * external axis is in front of the vector, and the joint data of the
-   * manipulator is appended at the end.
    * @note If a joint has only one encoder, then \f$ \theta = q \f$.
    */
   std::vector<double> theta = {};
@@ -61,10 +56,6 @@ struct JointStates {
    * Measured joint velocities of the full system using link-side encoder: \f$
    * \dot{q} \in \mathbb{R}^{n \times 1} \f$. This is the direct but more noisy
    * measurement of joint velocities. Unit: \f$ [rad/s] or [m/s] \f$.
-   * @note This contains values for both the external axes (if any) and the
-   * robot manipulator. If there is an external axis, the joint data of the
-   * external axis is in front of the vector, and the joint data of the
-   * manipulator is appended at the end.
    * @note If a joint has only one encoder, then \f$ \dot{\theta} = \dot{q} \f$.
    */
   std::vector<double> dq = {};
@@ -73,10 +64,6 @@ struct JointStates {
    * Measured joint velocities of the full system using motor-side encoder: \f$
    * \dot{\theta} \in \mathbb{R}^{n \times 1} \f$. This is the indirect but less
    * noisy measurement of joint velocities. Unit: \f$ [rad/s] or [m/s] \f$.
-   * @note This contains values for both the external axes (if any) and the
-   * robot manipulator. If there is an external axis, the joint data of the
-   * external axis is in front of the vector, and the joint data of the
-   * manipulator is appended at the end.
    * @note If a joint has only one encoder, then \f$ \dot{\theta} = \dot{q} \f$.
    */
   std::vector<double> dtheta = {};
@@ -84,10 +71,6 @@ struct JointStates {
   /**
    * Measured joint torques of the full system: \f$ \tau \in \mathbb{R}^{n
    * \times 1} \f$. Unit: \f$ [Nm] \f$.
-   * @note This contains values for both the external axes (if any) and the
-   * robot manipulator. If there is an external axis, the joint data of the
-   * external axis is in front of the vector, and the joint data of the
-   * manipulator is appended at the end.
    * @note If a joint has no torque measurement, then the corresponding value
    * will be 0.
    */
@@ -96,10 +79,6 @@ struct JointStates {
   /**
    * Numerical derivative of measured joint torques of the full system: \f$
    * \dot{\tau} \in \mathbb{R}^{n \times 1} \f$. Unit: \f$ [Nm/s] \f$.
-   * @note This contains values for both the external axes (if any) and the
-   * robot manipulator. If there is an external axis, the joint data of the
-   * external axis is in front of the vector, and the joint data of the
-   * manipulator is appended at the end.
    * @note If a joint has no torque measurement, then the corresponding value
    * will be 0.
    */
@@ -110,20 +89,23 @@ struct JointStates {
    * \in \mathbb{R}^{n \times 1} \f$. Produced by any external contact (with
    * robot body or end-effector) that does not belong to the known robot model.
    * Unit: \f$ [Nm] \f$.
-   * @note This contains values for both the external axes (if any) and the
-   * robot manipulator. If there is an external axis, the joint data of the
-   * external axis is in front of the vector, and the joint data of the
-   * manipulator is appended at the end.
    * @note If a joint has no torque measurement, then the corresponding value
    * will be 0.
    */
   std::vector<double> tau_ext = {};
 
   /**
-   * Measured joint temperatures of the full system: \f$ temperature \in
-   * \mathbb{R}^{n \times 1} \f$. Unit: \f$ [°C] \f$.
-   * @note This contains values for both the external axes (if any) and the
-   * robot manipulator.
+   * Estimated interaction joint torques of the full system: \f$ \hat \tau_{int}
+   * \in \mathbb{R}^{n \times 1} \f$. Produced by any interaction forces at the
+   * TCP. Unit: \f$ [Nm] \f$.
+   * @note If a joint has no torque measurement, the corresponding value will be
+   * 0.
+   */
+  std::vector<double> tau_interact = {};
+
+  /**
+   * Measured joint temperatures of the full system: \f$ temp \in \mathbb{R}^{n
+   * \times 1} \f$. Unit: \f$ [°C] \f$.
    * @note If a joint has no temperature measurement, the corresponding value
    * will be 0.
    */
@@ -132,16 +114,15 @@ struct JointStates {
 
 /**
  * @struct JointCommands
- * @brief Data structure containing the joint-space robot commands.
+ * @brief Joint-space commands data of the external axes (if any) and the robot
+ * manipulator.
+ * @note If external axes exist, the corresponding data will be at the front of
+ * the vectors.
  */
 struct JointCommands {
   /**
    * Desired joint positions of the full system using link-side encoder: \f$
    * q_{d} \in \mathbb{R}^{n \times 1} \f$. Unit: \f$ [rad] or [m] \f$.
-   * @note This contains values for both the external axes (if any) and the
-   * robot manipulator. If there is an external axis, the joint data of the
-   * external axis is in front of the vector, and the joint data of the
-   * manipulator is appended at the end.
    */
   std::vector<double> q_des = {};
 
@@ -149,10 +130,6 @@ struct JointCommands {
    * Desired joint velocities of the full system using link-side encoder: \f$
    * \dot{q}_{d} \in \mathbb{R}^{n \times 1} \f$. Unit: \f$ [rad/s] or [m/s]
    * \f$.
-   * @note This contains values for both the external axes (if any) and the
-   * robot manipulator. If there is an external axis, the joint data of the
-   * external axis is in front of the vector, and the joint data of the
-   * manipulator is appended at the end.
    */
   std::vector<double> dq_des = {};
 
@@ -160,10 +137,6 @@ struct JointCommands {
    * Desired joint torques of the full system: \f$ \tau_{d} \in \mathbb{R}^{n
    * \times 1} \f$. Compensation of nonlinear dynamics (gravity, centrifugal,
    * and Coriolis) is excluded. Unit: \f$ [Nm] \f$.
-   * @note This contains values for both the external axes (if any) and the
-   * robot manipulator. If there is an external axis, the joint data of the
-   * external axis is in front of the vector, and the joint data of the
-   * manipulator is appended at the end.
    * @note If a joint has no torque control capability, then the corresponding
    * value will be 0.
    */
