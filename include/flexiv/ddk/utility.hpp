@@ -27,28 +27,28 @@ namespace utility {
  * followed by a space, including the last one if trailing_space = true.
  */
 template <typename T>
-inline std::string Vec2Str(const std::vector<T> &vec, size_t decimal = 3,
-                           bool trailing_space = true,
-                           const std::string &separator = " ") {
-  if (vec.empty()) {
-    return "";
-  }
-
-  std::stringstream ss;
-  ss.precision(decimal);
-  ss << std::fixed;
-
-  for (size_t i = 0; i < vec.size(); ++i) {
-    if (i > 0) {
-      ss << separator;
+inline std::string Vec2Str(const std::vector<T>& vec, size_t decimal = 3,
+    bool trailing_space = true, const std::string& separator = " ")
+{
+    if (vec.empty()) {
+        return "";
     }
-    ss << vec[i];
-  }
 
-  if (trailing_space) {
-    ss << " ";
-  }
-  return ss.str();
+    std::stringstream ss;
+    ss.precision(decimal);
+    ss << std::fixed;
+
+    for (size_t i = 0; i < vec.size(); ++i) {
+        if (i > 0) {
+            ss << separator;
+        }
+        ss << vec[i];
+    }
+
+    if (trailing_space) {
+        ss << " ";
+    }
+    return ss.str();
 }
 
 /**
@@ -61,11 +61,11 @@ inline std::string Vec2Str(const std::vector<T> &vec, size_t decimal = 3,
  * followed by a space, including the last one if trailing_space = true.
  */
 template <typename T, size_t N>
-inline std::string Arr2Str(const std::array<T, N> &arr, size_t decimal = 3,
-                           bool trailing_space = true,
-                           const std::string &separator = " ") {
-  std::vector<T> vec(arr.begin(), arr.end());
-  return Vec2Str(vec, decimal, trailing_space, separator);
+inline std::string Arr2Str(const std::array<T, N>& arr, size_t decimal = 3,
+    bool trailing_space = true, const std::string& separator = " ")
+{
+    std::vector<T> vec(arr.begin(), arr.end());
+    return Vec2Str(vec, decimal, trailing_space, separator);
 }
 
 /**
@@ -76,16 +76,16 @@ inline std::string Arr2Str(const std::array<T, N> &arr, size_t decimal = 3,
  * @param[in] ref_strings Reference strings to check against.
  * @return True if the program arguments contain one or more reference strings.
  */
-inline bool ProgramArgsExistAny(int argc, char **argv,
-                                const std::vector<std::string> &ref_strings) {
-  for (int i = 0; i < argc; i++) {
-    for (const auto &v : ref_strings) {
-      if (v == std::string(argv[i])) {
-        return true;
-      }
+inline bool ProgramArgsExistAny(int argc, char** argv, const std::vector<std::string>& ref_strings)
+{
+    for (int i = 0; i < argc; i++) {
+        for (const auto& v : ref_strings) {
+            if (v == std::string(argv[i])) {
+                return true;
+            }
+        }
     }
-  }
-  return false;
+    return false;
 }
 
 /**
@@ -96,9 +96,9 @@ inline bool ProgramArgsExistAny(int argc, char **argv,
  * @param[in] ref_strings Reference string to check against.
  * @return True if the program arguments contain this specific reference string.
  */
-inline bool ProgramArgsExist(int argc, char **argv,
-                             const std::string &ref_strings) {
-  return ProgramArgsExistAny(argc, argv, {ref_strings});
+inline bool ProgramArgsExist(int argc, char** argv, const std::string& ref_strings)
+{
+    return ProgramArgsExistAny(argc, argv, {ref_strings});
 }
 
 /**
@@ -108,30 +108,29 @@ inline bool ProgramArgsExist(int argc, char **argv,
  * @param format The format of target date time string.
  * @return Converted date time string.
  */
-inline std::string
-convertToDateTimeString(int sec_since_epoch, int nano_sec_since_full_sec,
-                        const std::string &format = "%Y-%m-%d %H:%M:%S") {
-  // Convert sec_since_epoch to a time_point
-  std::chrono::system_clock::time_point tp =
-      std::chrono::system_clock::time_point(
-          std::chrono::seconds(sec_since_epoch));
+inline std::string convertToDateTimeString(int sec_since_epoch, int nano_sec_since_full_sec,
+    const std::string& format = "%Y-%m-%d %H:%M:%S")
+{
+    // Convert sec_since_epoch to a time_point
+    std::chrono::system_clock::time_point tp
+        = std::chrono::system_clock::time_point(std::chrono::seconds(sec_since_epoch));
 
-  // Convert time_point to time_t for conversion to tm structure
-  std::time_t time = std::chrono::system_clock::to_time_t(tp);
+    // Convert time_point to time_t for conversion to tm structure
+    std::time_t time = std::chrono::system_clock::to_time_t(tp);
 
-  // Convert time_t to tm (local time)
-  std::tm *local = std::localtime(&time);
+    // Convert time_t to tm (local time)
+    std::tm* local = std::localtime(&time);
 
-  // Create a stringstream to format the output
-  std::stringstream ss;
+    // Create a stringstream to format the output
+    std::stringstream ss;
 
-  // Format the time using std::put_time and the provided format
-  ss << std::put_time(local, format.c_str());
+    // Format the time using std::put_time and the provided format
+    ss << std::put_time(local, format.c_str());
 
-  // Add nanoseconds part, if needed
-  ss << "." << std::setw(9) << std::setfill('0') << nano_sec_since_full_sec;
+    // Add nanoseconds part, if needed
+    ss << "." << std::setw(9) << std::setfill('0') << nano_sec_since_full_sec;
 
-  return ss.str();
+    return ss.str();
 }
 
 } /* namespace utility */
