@@ -29,7 +29,12 @@ elseif(${CMAKE_SYSTEM_NAME} MATCHES "Windows")
 endif()
 
 # Parse expected hash of the library file
-file(READ ${CMAKE_CURRENT_SOURCE_DIR}/lib/${DDK_LIB}.sha256 EXPECTED_HASH)
+file(READ ${CMAKE_CURRENT_SOURCE_DIR}/lib/${DDK_LIB}.sha256 EXPECTED_HASH_RAW)
+string(STRIP "${EXPECTED_HASH_RAW}" EXPECTED_HASH)
+string(LENGTH "${EXPECTED_HASH}" HASH_LEN)
+if(NOT HASH_LEN EQUAL 64)
+    message(FATAL_ERROR "Invalid SHA256 hash length: ${HASH_LEN}. Expected 64. Value: '${EXPECTED_HASH}'")
+endif()
 
 # Download the library file from GitHub 
 set(DDK_LIB_URL https://github.com/flexivrobotics/flexiv_ddk/releases/download/v1.3/${DDK_LIB})
