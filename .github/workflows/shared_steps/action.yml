@@ -1,0 +1,35 @@
+name: "Shared Build Steps"
+runs:
+  using: "composite"
+  # Note: working directory will be reset to the repo root for each new step
+  steps:
+    # Use a fixed CMake version
+    - name: Set up CMake
+      uses: jwlawson/actions-setup-cmake@v2
+      with:
+        cmake-version: "3.22.1"
+
+    # Build and install all dependencies to DDK installation directory.
+    - name: Build and install dependencies
+      shell: bash
+      run: |
+        cmake --version
+        cd thirdparty
+        bash build_and_install_dependencies.sh ~/ddk_install 4
+
+    # Configure CMake, then build and install flexiv_ddk library to DDK installation directory.
+    - name: Build and install library
+      shell: bash
+      run: |
+        mkdir -p build && cd build
+        cmake .. -DCMAKE_INSTALL_PREFIX=~/ddk_install
+        cmake --build . --target install --config Release
+
+    # Find and link to flexiv_ddk library, then build all example programs.
+    - name: Build examples
+      shell: bash
+      run: |
+        cd example
+        mkdir -p build && cd build
+        cmake .. -DCMAKE_PREFIX_PATH=~/ddk_install
+        cmake --build . --config Release -j 4
