@@ -82,6 +82,14 @@ macro(FlexivInstallLibrary)
             DESTINATION "lib/cmake/${PROJECT_NAME}"
             )
 
+    # Replace the dummy static lib with the actual static lib 
+    install(CODE 
+            "file(REMOVE ${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_LIBDIR}/${CMAKE_STATIC_LIBRARY_PREFIX}${PROJECT_NAME}${CMAKE_STATIC_LIBRARY_SUFFIX})")
+    install(FILES ${CMAKE_CURRENT_BINARY_DIR}/${DDK_LIB}
+            DESTINATION ${CMAKE_INSTALL_LIBDIR}
+            RENAME ${CMAKE_STATIC_LIBRARY_PREFIX}${PROJECT_NAME}${CMAKE_STATIC_LIBRARY_SUFFIX}
+            )
+
     # Use the CPack Package Generator
     set(CPACK_PACKAGE_VENDOR "Flexiv")
     set(CPACK_PACKAGE_CONTACT "support@flexiv.com")
