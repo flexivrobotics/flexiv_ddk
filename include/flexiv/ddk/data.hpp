@@ -1,7 +1,7 @@
 /**
  * @file data.hpp
  * @brief Header file containing various data structs.
- * @copyright Copyright (C) 2016-2025 Flexiv Ltd. All Rights Reserved.
+ * @copyright Copyright (C) 2016-2026 Flexiv Ltd. All Rights Reserved.
  */
 
 #ifndef FLEXIV_DDK_DATA_HPP_
