@@ -3,7 +3,7 @@ cmake_minimum_required(VERSION 3.16.3)
 # ===================================================================
 #      PROJECT SETUP
 # ===================================================================
-project(flexiv_ddk VERSION 1.3.0)
+project(flexiv_ddk VERSION 1.4.0)
 
 # Configure build type
 if(NOT CMAKE_BUILD_TYPE)
@@ -28,6 +28,23 @@ elseif(${CMAKE_SYSTEM_NAME} MATCHES "Windows")
   endif()
 endif()
 
+# Option to support ROS2 Jazzy
+option(DDK_SUPPORT_ROS2_JAZZY "Use DDK library compatible with ROS2 Jazzy" OFF)
+if(DDK_SUPPORT_ROS2_JAZZY)
+  if(${CMAKE_SYSTEM_NAME} MATCHES "Linux")
+    if(${CMAKE_SYSTEM_PROCESSOR} MATCHES "x86_64")
+      set(DDK_LIB "libflexiv_ddk.x86_64-linux-gnu.ros2-jazzy.a")
+    elseif(${CMAKE_SYSTEM_PROCESSOR} MATCHES "aarch64")
+      set(DDK_LIB "libflexiv_ddk.aarch64-linux-gnu.ros2-jazzy.a")
+    else()
+      message(FATAL_ERROR 
+        "Compatibility with ROS2 Jazzy is currently not supported on Linux with ${CMAKE_SYSTEM_PROCESSOR} processor.")
+    endif()
+  else()
+    message(FATAL_ERROR "Compatibility with ROS2 Jazzy is currently not supported on ${CMAKE_SYSTEM_NAME}.")
+  endif()
+endif()
+
 # Parse expected hash of the library file
 file(READ ${CMAKE_CURRENT_SOURCE_DIR}/lib/${DDK_LIB}.sha256 EXPECTED_HASH_RAW)
 string(STRIP "${EXPECTED_HASH_RAW}" EXPECTED_HASH)
@@ -37,7 +54,7 @@ if(NOT HASH_LEN EQUAL 64)
 endif()
 
 # Download the library file from GitHub 
-set(DDK_LIB_URL https://github.com/flexivrobotics/flexiv_ddk/releases/download/v1.3/${DDK_LIB})
+set(DDK_LIB_URL https://github.com/flexivrobotics/flexiv_ddk/releases/download/v1.4/${DDK_LIB})
 message(STATUS "Downloading ${DDK_LIB_URL} ...")
 file(DOWNLOAD ${DDK_LIB_URL} ${CMAKE_CURRENT_BINARY_DIR}/${DDK_LIB}
      SHOW_PROGRESS
