@@ -207,5 +207,4 @@
       - foonathan_memory_vendor: https://github.com/eProsima/foonathan_memory_vendor/blob/master/LICENSE
       - Fast-CDR: https://github.com/eProsima/Fast-CDR/blob/master/LICENSE
       - Fast-DDS: https://github.com/eProsima/Fast-DDS/blob/master/LICENSE
-      - yaml-cpp: https://github.com/jbeder/yaml-cpp/blob/master/LICENSE
   
