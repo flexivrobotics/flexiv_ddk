@@ -2,21 +2,23 @@
 set -e
 echo "Installing foonathan_memory"
 
+# Repo name
+REPO=memory
 # Use a specific version
-VER_TAG=v1.3.1
+VER_TAG=v0.7-3
 
 # Clone source code
-if [ ! -d foonathan_memory_vendor ] ; then
-  git clone https://github.com/eProsima/foonathan_memory_vendor.git --branch $VER_TAG
-  cd foonathan_memory_vendor
+if [ ! -d $REPO ] ; then
+  git clone https://github.com/foonathan/$REPO.git --branch $VER_TAG
+  cd $REPO
 else
-  cd foonathan_memory_vendor
+  cd $REPO
   git checkout $VER_TAG
 fi
 
 # Configure CMake
-mkdir -p build && cd build
-cmake .. $SHARED_CMAKE_ARGS
+rm -rf build && mkdir -p build && cd build
+cmake .. $SHARED_CMAKE_ARGS -DBUILD_SHARED_LIBS=ON -DFOONATHAN_MEMORY_BUILD_EXAMPLES=OFF -DFOONATHAN_MEMORY_BUILD_TESTS=OFF -DFOONATHAN_MEMORY_BUILD_TOOLS=OFF
 
 # Build and install
 cmake --build . --target install --config Release -j $NUM_JOBS
