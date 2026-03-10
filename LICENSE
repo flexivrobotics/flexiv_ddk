@@ -204,8 +204,7 @@
       - Eigen: https://gitlab.com/libeigen/eigen/-/blob/master/LICENSE
       - spdlog: https://github.com/gabime/spdlog/blob/v1.x/LICENSE
       - tinyxml2: https://github.com/leethomason/tinyxml2/blob/master/LICENSE.txt
-      - foonathan_memory_vendor: https://github.com/eProsima/foonathan_memory_vendor/blob/master/LICENSE
+      - foonathan_memory: https://github.com/foonathan/memory/blob/master/LICENSE
       - Fast-CDR: https://github.com/eProsima/Fast-CDR/blob/master/LICENSE
       - Fast-DDS: https://github.com/eProsima/Fast-DDS/blob/master/LICENSE
-      - yaml-cpp: https://github.com/jbeder/yaml-cpp/blob/master/LICENSE
   

@@ -2,30 +2,23 @@
 set -e
 echo "Installing foonathan_memory"
 
-# Get install directory and number of parallel build jobs as script arguments
-INSTALL_DIR=$1
-NUM_JOBS=$2
+# Repo name
+REPO=memory
+# Use a specific version
+VER_TAG=v0.7-3
 
 # Clone source code
-if [ ! -d foonathan_memory_vendor ] ; then
-  git clone https://github.com/eProsima/foonathan_memory_vendor.git
-  cd foonathan_memory_vendor
+if [ ! -d $REPO ] ; then
+  git clone https://github.com/foonathan/$REPO.git --branch $VER_TAG
+  cd $REPO
 else
-  cd foonathan_memory_vendor
+  cd $REPO
+  git checkout $VER_TAG
 fi
 
-# Use specific version
-git fetch -p
-git checkout v1.2.1
-git submodule update --init --recursive
-
 # Configure CMake
-mkdir -p build && cd build
-cmake .. -DCMAKE_BUILD_TYPE=Release \
-         -DBUILD_SHARED_LIBS=OFF \
-         -DCMAKE_POSITION_INDEPENDENT_CODE=ON \
-         -DCMAKE_PREFIX_PATH=$INSTALL_DIR \
-         -DCMAKE_INSTALL_PREFIX=$INSTALL_DIR
+rm -rf build && mkdir -p build && cd build
+cmake .. $SHARED_CMAKE_ARGS -DBUILD_SHARED_LIBS=ON -DFOONATHAN_MEMORY_BUILD_EXAMPLES=OFF -DFOONATHAN_MEMORY_BUILD_TESTS=OFF -DFOONATHAN_MEMORY_BUILD_TOOLS=OFF
 
 # Build and install
 cmake --build . --target install --config Release -j $NUM_JOBS

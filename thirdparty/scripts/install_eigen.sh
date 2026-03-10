@@ -2,29 +2,22 @@
 set -e
 echo "Installing eigen"
 
-# Get install directory and number of parallel build jobs as script arguments
-INSTALL_DIR=$1
-NUM_JOBS=$2
+# Same as the apt installed version on Ubuntu 22.04
+VER_TAG=3.4.0
 
 # Clone source code
 if [ ! -d eigen ] ; then
-  git clone https://gitlab.com/libeigen/eigen.git
+  git clone https://gitlab.com/libeigen/eigen.git --branch $VER_TAG
   cd eigen
 else
   cd eigen
+  git checkout $VER_TAG
 fi
 
-# Use specific version
-git fetch --prune --tags
-git checkout 3.4.0
 
 # Configure CMake
 mkdir -p build && cd build
-cmake .. -DCMAKE_BUILD_TYPE=Release \
-         -DBUILD_SHARED_LIBS=OFF \
-         -DCMAKE_POSITION_INDEPENDENT_CODE=ON \
-         -DCMAKE_INSTALL_PREFIX=$INSTALL_DIR \
-         -DCMAKE_PREFIX_PATH=$INSTALL_DIR 
+cmake .. $SHARED_CMAKE_ARGS
 
 # Build and install
 cmake --build . --target install --config Release -j $NUM_JOBS
