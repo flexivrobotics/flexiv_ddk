@@ -5,17 +5,18 @@
 
 Flexiv DDK (Data Distribution Kit) is an auxiliary tool that enables the users to obtain realtime data from the robot, including system status, robot states and commands, primitive states, plan info, etc.
 
-
 ## Environment Compatibility
 
-| **OS**                | **Platform** | **C++ compiler kit** | **Python interpreter** |
-| --------------------- | ------------ | -------------------- | ---------------------- |
-| Linux (Ubuntu 20.04+) | x86_64       | GCC   v9.4+          | 3.8, 3.10, 3.12        |
-| Windows 10+           | x86_64       | MSVC  v14.2+         | 3.8, 3.10, 3.12        |
+| **OS**                | **Platform**    | **C++ compiler kit** | **Python interpreter** |
+| --------------------- | --------------- | -------------------- | ---------------------- |
+| Linux (Ubuntu 22.04+) | x86_64, aarch64 | GCC v11.4+           | 3.10, 3.12, 3.14       |
+| Windows 10+           | x86_64          | MSVC v14.2+          | 3.10, 3.12             |
+
 ## Quick Start
 
 The **C++** DDK libraries are packed into a unified modern CMake project named ``flexiv_ddk``, which can be configured and installed via CMake on all supported OS.
 The **Python** DDK library is a Python package that can be installed via pip.
+
 ### Note
 
 * You might need to turn off your computer's firewall or whitelist the DDK programs to be able to establish connection with the robot.
@@ -51,7 +52,7 @@ For example:
 
     python3.10 ./basics1_display_joint_states.py Rizon4-123456
 
-## Quick Start - C++ 
+## Quick Start - C++
 
 ### Install on Linux
 
