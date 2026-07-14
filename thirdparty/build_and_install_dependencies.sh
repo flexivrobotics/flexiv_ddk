@@ -57,8 +57,6 @@ mkdir -p cloned && cd cloned
 bash $SCRIPT_DIR/scripts/install_eigen.sh
 bash $SCRIPT_DIR/scripts/install_spdlog.sh
 bash $SCRIPT_DIR/scripts/install_tinyxml2.sh
-bash $SCRIPT_DIR/scripts/install_foonathan_memory.sh
-bash $SCRIPT_DIR/scripts/install_Fast-CDR.sh
-bash $SCRIPT_DIR/scripts/install_Fast-DDS.sh
+bash $SCRIPT_DIR/scripts/install_zenoh.sh
 
 echo ">>>>> Finished: flexiv_ddk/thirdparty/build_and_install_dependencies.sh <<<<<"
