@@ -28,10 +28,6 @@ public:
      * services will initialize and connection with the robot will be established.
      * @param[in] robot_sn Serial number of the robot to connect. The accepted
      * formats are: "Rizon 4s-123456" and "Rizon4s-123456".
-     * @param[in] network_interface_whitelist Limit the network interface(s) that can be used to
-     * try to establish connection with the specified robot. The whitelisted network interface is
-     * defined by its associated IPv4 address. For example, {"10.42.0.1", "192.168.2.102"}. If left
-     * empty, all available network interfaces will be tried when searching for the specified robot.
      * @param[in] verbose Enable/disable info and warning prints.
      * @throw std::invalid_argument if the format of [robot_sn] is invalid.
      * @throw std::runtime_error if the initialization sequence failed.
@@ -41,8 +37,7 @@ public:
      * @warning This constructor blocks until the initialization sequence is
      * successfully finished and connection with the robot is established.
      */
-    Client(const std::string& robot_sn,
-        const std::vector<std::string>& network_interface_whitelist = {}, bool verbose = true);
+    Client(const std::string& robot_sn, bool verbose = true);
     virtual ~Client();
 
     /**
@@ -52,28 +47,47 @@ public:
     bool connected() const;
 
     /**
-     * @brief [Non-blocking] Access the current joint-space robot states.
-     * @return JointStates value copy.
+     * @brief [Non-blocking] Joint groups that the connected robot has.
+     * @return Existing joint groups mapped form enum value to string.
      */
-    JointStates joint_states() const;
+    std::map<JointGroup, std::string> groups() const;
 
     /**
-     * @brief [Non-blocking] Access the current Cartesian-space robot states.
-     * @return CartesianStates value copy.
+     * @brief [Non-blocking] Current states data of all existing joint groups of the robot.
+     * @return Robot states data mapped by joint group.
+     * @warning Cartesian states of non-single-arm joint groups are not populated.
      */
-    CartesianStates cartesian_states() const;
+    std::map<JointGroup, RobotStates> states() const;
 
     /**
-     * @brief [Non-blocking] Access the current joint-space robot commands.
-     * @return JointCommands value copy.
+     * @brief [Non-blocking] Current actions data of all existing joint groups of the robot.
+     * @return Robot actions data mapped by joint group.
+     * @warning Cartesian actions of non-single-arm joint groups are not populated.
      */
-    JointCommands joint_commands() const;
+    std::map<JointGroup, RobotActions> actions() const;
 
     /**
-     * @brief [Non-blocking] Access the current Cartesian-space robot commands.
-     * @return CartesianCommands value copy.
+     * @brief [Blocking] States data of the primitive(s) that are currently running on each joint
+     * group.
+     * @return A map of JointGroup to PrimitiveStates. Only contains joint groups that exist.
+     * @throw std::runtime_error if failed to get a reply from the connected robot.
+     * @note This function blocks until a reply is received.
      */
-    CartesianCommands cartesian_commands() const;
+    std::map<JointGroup, PrimitiveStates> primitive_states() const;
+
+    /**
+     * @brief [Blocking] Score of each joint group's current configuration (posture), calculated
+     * from the manipulability measurements.
+     * @return Configuration score mapped by joint group as {translation_score,
+     * orientation_score}. The quality of configuration based on the score can be interpreted as:
+     * poor = [0, 20), medium = [20, 40), good = [40, 100].
+     * @throw std::runtime_error if failed to get a reply from the connected robot.
+     * @note This function blocks until a reply is received.
+     * @warning A poor configuration score means the robot is near or at singularity, which can lead
+     * to degraded Cartesian performance. Use configuration with high scores for better
+     * manipulability and task results.
+     */
+    std::map<JointGroup, std::pair<double, double>> configuration_score() const;
 
     /**
      * @brief [Blocking] Get detailed information about the currently executing
@@ -88,33 +102,17 @@ public:
     PlanInfo plan_info() const;
 
     /**
-     * @brief [Blocking] State parameters of the executing primitive and their current values.
-     * @return A map of {pt_state_name, pt_state_value(s)}. Booleans are represented by int 1
-     * and 0. For example,
-     * {{"primitiveName","MoveL"},{"reachedTarget", 0}, {"timePeriod", 5.6}}.
-     * @throw std::runtime_error if failed to get a reply from the connected robot.
-     * @note This function blocks until a reply is received.
-     */
-    std::map<std::string, FlexivPrimitiveStatesType> primitive_states() const;
-
-    /**
-     * @brief [Non-blocking] Access the current time from server. It contains
-     * current seconds since epoch and nanoseconds since last full second
-     * @return ServerTime value copy.
-     */
-    ddk::ServerTime server_time(void) const;
-
-    /**
-     * @brief [Non-blocking] Whether the emergency stop is released.
+     * @brief [Non-blocking] Whether all connected emergency stops (E-stops) are released.
      * @return True: released; false: pressed.
      */
     bool estop_released() const;
 
     /**
-     * @brief [Non-blocking] Whether the enabling button is pressed.
-     * @return True: pressed; false: released.
+     * @brief [Non-blocking] Whether the 3-position enabling device (e.g. enabling button on the
+     * motion bar) is in the ON position (the middle position).
+     * @return True: ON; false: OFF.
      */
-    bool enabling_button_pressed() const;
+    bool enabling_device_on() const;
 
     /**
      * @brief [Non-blocking] Read all digital input ports on the control box, including 16 on the
@@ -125,10 +123,12 @@ public:
     std::array<bool, ddk::kIOPorts> digital_inputs(void) const;
 
     /**
-     * @brief [Blocking] Access the current manipulability.
-     * @return Manipulability data copy.
+     * @brief [Non-blocking] Current reading from all digital output ports, including 16 on the
+     * control box plus 2 in each wrist connector.
+     * @return A boolean array whose index corresponds to that of the digital output ports.
+     * True: port high; false: port low.
      */
-    Manipulability manipulability() const;
+    std::array<bool, kIOPorts> digital_outputs() const;
 
 private:
     class Impl;
