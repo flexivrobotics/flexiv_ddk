@@ -3,7 +3,7 @@ cmake_minimum_required(VERSION 3.16.3)
 # ===================================================================
 #      PROJECT SETUP
 # ===================================================================
-project(flexiv_ddk VERSION 1.4.0)
+project(flexiv_ddk VERSION 2.1)
 
 # Configure build type
 if(NOT CMAKE_BUILD_TYPE)
@@ -56,7 +56,7 @@ if(NOT HASH_LEN EQUAL 64)
 endif()
 
 # Download the library file from GitHub 
-set(DDK_LIB_URL https://github.com/flexivrobotics/flexiv_ddk/releases/download/v1.4/${DDK_LIB})
+set(DDK_LIB_URL https://github.com/flexivrobotics/flexiv_ddk/releases/download/v2.1/${DDK_LIB})
 message(STATUS "Downloading ${DDK_LIB_URL} ...")
 file(DOWNLOAD ${DDK_LIB_URL} ${CMAKE_CURRENT_BINARY_DIR}/${DDK_LIB}
      SHOW_PROGRESS
@@ -80,23 +80,22 @@ if(Threads_FOUND)
   message(STATUS "Found Threads: HAVE_PTHREAD = ${THREADS_HAVE_PTHREAD_ARG}")
 endif()
 
-# Eigen3
-find_package(Eigen3 REQUIRED)
-if(Eigen3_FOUND)
-  message(STATUS "Found Eigen3: ${Eigen3_DIR}")
-endif()
-
 # spdlog
 find_package(spdlog REQUIRED)
 if(spdlog_FOUND)
   message(STATUS "Found spdlog: ${spdlog_DIR}")
 endif()
 
-# Fast-DDS (Fast-RTPS)
-set(OPENSSL_USE_STATIC_LIBS ON)
-find_package(fastrtps REQUIRED)
-if(fastrtps_FOUND)
-  message(STATUS "Found fastrtps: ${fastrtps_DIR}")
+# Zenoh transport
+find_package(zenohc REQUIRED)
+if(zenohc_FOUND)
+  message(STATUS "Found zenohc: ${zenohc_DIR}")
+endif()
+
+# zenohcxx
+find_package(zenohcxx REQUIRED)
+if(zenohcxx_FOUND)
+  message(STATUS "Found zenohcxx: ${zenohcxx_DIR}")
 endif()
 
 # ===================================================================
@@ -117,10 +116,8 @@ target_include_directories(${PROJECT_NAME} PUBLIC
 # Link to dependencies
 target_link_libraries(${PROJECT_NAME} PUBLIC
   Threads::Threads
-  Eigen3::Eigen
   spdlog::spdlog
-  fastrtps
-  fastcdr
+  zenohcxx::zenohc
 )
 
 # Use moderate compiler warning option
