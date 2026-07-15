@@ -2,7 +2,7 @@
 
 """basics5_display_server_time.py
 
-This tutorial will check connection with the robot server and print server_time.
+This tutorial will check connection with the robot server and print state timestamps.
 """
 
 __copyright__ = "Copyright (C) 2016-2026 Flexiv Ltd. All Rights Reserved."
@@ -26,17 +26,16 @@ def convert_to_datetime_string(sec_since_epoch: int, nano_sec_since_full_sec: in
     return f"{formatted_time}.{nano_sec_since_full_sec:09d}"
 
 
-def print_server_time(client, logger, stop_event):
+def print_state_timestamps(client, logger, stop_event):
     """
-    Print server_time data @ 1Hz.
+    Print state timestamps by joint group @ 1Hz.
 
     """
 
     while not stop_event.is_set():
-        # Print server_time
-        server_time = client.server_time()
-        logger.info("Current server time:")
-        print(convert_to_datetime_string(server_time.sec, server_time.nano_sec))
+        logger.info("Current robot state timestamps:")
+        for group, states in client.states().items():
+            print(f"{group}: {convert_to_datetime_string(*states.timestamp)}")
         print("", flush=True)
         # fmt: on
 
@@ -63,7 +62,7 @@ def main():
     # Print description
     logger.info(
         ">>> Tutorial description <<<\nThis tutorial will check connection "
-        "with the robot server and print primitive states.\n"
+        "with the robot server and print state timestamps.\n"
     )
 
     try:
@@ -73,7 +72,7 @@ def main():
 
         if not client.connected():
             logger.warn("Cannot get connected with robot, retrying ...")
-            if not client.connected()():
+            if not client.connected():
                 logger.error("Exiting ...")
                 return 1
         logger.info(f"Connected with robot {args.robot_sn}")
@@ -84,7 +83,7 @@ def main():
     # Thread for printing robot data
     # =============================================================================
     print_thread = threading.Thread(
-        target=print_server_time, args=[client, logger, stop_event]
+        target=print_state_timestamps, args=[client, logger, stop_event]
     )
     print_thread.start()
 

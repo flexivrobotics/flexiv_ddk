@@ -1,8 +1,8 @@
 #!/usr/bin/env python
 
-"""basics1_display_joint_states.py
+"""basics1_display_robot_states.py
 
-This tutorial will check connection with the robot server and print joint states.
+This tutorial will check connection with the robot server and print robot states.
 """
 
 __copyright__ = "Copyright (C) 2016-2026 Flexiv Ltd. All Rights Reserved."
@@ -12,31 +12,29 @@ import time
 import argparse
 import threading
 import spdlog  # pip install spdlog
-import flexivddk # pip install flexivddk 
+import flexivddk  # pip install flexivddk
 
 
-def print_joint_states(client, logger, stop_event):
+def print_robot_states(client, logger, stop_event):
     """
-    Print joint states data @ 1Hz.
+    Print robot states by joint group @ 1Hz.
 
     """
 
     while not stop_event.is_set():
-        # Print joint states, round all float values to 2 decimals
-        logger.info("Current robot joint states:")
-        # fmt: off
-        print("{")
-        print(f"q: {['%.2f' % i for i in client.joint_states().q]}",)
-        print(f"theta: {['%.2f' % i for i in client.joint_states().theta]}")
-        print(f"dq: {['%.2f' % i for i in client.joint_states().dq]}")
-        print(f"dtheta: {['%.2f' % i for i in client.joint_states().dtheta]}")
-        print(f"tau: {['%.2f' % i for i in client.joint_states().tau]}")
-        print(f"tau_dot: {['%.2f' % i for i in client.joint_states().tau_dot]}")
-        print(f"tau_ext: {['%.2f' % i for i in client.joint_states().tau_ext]}")
-        print(f"tau_interact: {['%.2f' % i for i in client.joint_states().tau_interact]}")
-        print(f"temperature: {['%.2f' % i for i in client.joint_states().temperature]}")
-        print("}", flush= True)
-        # fmt: on
+        logger.info("Current robot states by joint group:")
+        for group, states in client.states().items():
+            print(f"{group}:")
+            print(f"  q: {['%.2f' % value for value in states.q]}")
+            print(f"  theta: {['%.2f' % value for value in states.theta]}")
+            print(f"  dq: {['%.2f' % value for value in states.dq]}")
+            print(f"  dtheta: {['%.2f' % value for value in states.dtheta]}")
+            print(f"  tau: {['%.2f' % value for value in states.tau]}")
+            print(f"  tau_dot: {['%.2f' % value for value in states.tau_dot]}")
+            print(f"  tau_ext: {['%.2f' % value for value in states.tau_ext]}")
+            print(f"  tau_interact: {['%.2f' % value for value in states.tau_interact]}")
+            print(f"  temperature: {['%.2f' % value for value in states.temperature]}")
+        print(flush=True)
 
         time.sleep(1)
 
@@ -61,7 +59,7 @@ def main():
     # Print description
     logger.info(
         ">>> Tutorial description <<<\nThis tutorial will check connection "
-        "with the robot server and print robot joint states.\n"
+        "with the robot server and print robot states.\n"
     )
 
     try:
@@ -71,7 +69,7 @@ def main():
 
         if not client.connected():
             logger.warn("Cannot get connected with robot, retrying ...")
-            if not client.connected()():
+            if not client.connected():
                 logger.error("Exiting ...")
                 return 1
         logger.info(f"Connected with robot {args.robot_sn}")
@@ -82,7 +80,7 @@ def main():
     # Thread for printing robot data
     # =============================================================================
     print_thread = threading.Thread(
-        target=print_joint_states, args=[client, logger, stop_event]
+        target=print_robot_states, args=[client, logger, stop_event]
     )
     print_thread.start()
 

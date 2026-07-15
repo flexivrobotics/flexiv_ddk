@@ -1,8 +1,8 @@
 #!/usr/bin/env python
 
-"""basics9_display_manipulability.py
+"""basics8_display_configuration_score.py
 
-This tutorial will check connection with the robot server and print manipulability.
+This tutorial will check connection with the robot server and print configuration scores.
 """
 
 __copyright__ = "Copyright (C) 2016-2026 Flexiv Ltd. All Rights Reserved."
@@ -15,23 +15,18 @@ import spdlog  # pip install spdlog
 import flexivddk # pip install flexivddk
 
 
-def print_manipulability(client, logger, stop_event):
+
+def print_configuration_score(client, logger, stop_event):
     """
-    Print manipulability data @ 1Hz.
+    Print configuration scores by joint group @ 1Hz.
 
     """
 
     while not stop_event.is_set():
-        # Print manipulability
-        manipulability = client.manipulability()
-        logger.info("Current manipulability:")
-        print(f"configuration_score: {manipulability.configuration_score}")
-        print(f"translation: {manipulability.translation}")
-        print(f"rotation: {manipulability.rotation}")
-        print(f"translation_gradient: {['%.2f' % i for i in manipulability.translation_gradient]}")
-        print(f"rotation_gradient: {['%.2f' % i for i in manipulability.rotation_gradient]}")
-        print("", flush=True)
-        # fmt: on
+        logger.info("Current configuration scores by joint group:")
+        for group, scores in client.configuration_score().items():
+            print(f"{group}: translation={scores[0]:.2f}, orientation={scores[1]:.2f}")
+        print(flush=True)
 
         time.sleep(1)
 
@@ -56,7 +51,7 @@ def main():
     # Print description
     logger.info(
         ">>> Tutorial description <<<\nThis tutorial will check connection "
-        "with the robot server and print manipulability.\n"
+        "with the robot server and print configuration scores.\n"
     )
 
     try:
@@ -66,7 +61,7 @@ def main():
 
         if not client.connected():
             logger.warn("Cannot get connected with robot, retrying ...")
-            if not client.connected()():
+            if not client.connected():
                 logger.error("Exiting ...")
                 return 1
         logger.info(f"Connected with robot {args.robot_sn}")
@@ -77,7 +72,7 @@ def main():
     # Thread for printing robot data
     # =============================================================================
     print_thread = threading.Thread(
-        target=print_manipulability, args=[client, logger, stop_event]
+        target=print_configuration_score, args=[client, logger, stop_event]
     )
     print_thread.start()
 

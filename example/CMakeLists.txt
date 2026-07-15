@@ -20,7 +20,7 @@ set(EXAMPLE_LIST
   basics4_display_primitive_states
   basics5_display_server_time
   basics6_display_system_status
-  basics8_display_configuration_score
+  basics7_display_configuration_score
 )
 
 
