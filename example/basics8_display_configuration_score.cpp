@@ -1,8 +1,7 @@
 /**
- * @example basics9_display_manipulability.cpp
- * This tutorial check connection with the robot and print received current
- * manipulability data.
- * @copyright Copyright (C) 2016-2024 Flexiv Ltd. All Rights Reserved.
+ * @example basics8_display_configuration_score.cpp
+ * This tutorial checks connection with the robot and prints configuration scores.
+ * @copyright Copyright (C) 2016-2026 Flexiv Ltd. All Rights Reserved.
  * @author Flexiv
  */
 #include <atomic>
@@ -40,8 +39,8 @@ void PrintHelp()
     // clang-format on
 }
 
-/** @brief Print robot manipulability data @ 1Hz */
-void printManipulability(flexiv::ddk::Client& client)
+/** @brief Print configuration score by joint group @ 1Hz */
+void printConfigurationScore(flexiv::ddk::Client& client)
 {
     while (keep_running.load()) {
         // Check connection with the robot
@@ -50,10 +49,8 @@ void printManipulability(flexiv::ddk::Client& client)
             std::this_thread::sleep_for(std::chrono::seconds(5));
             continue;
         }
-        // Print all robot commands in JSON format using the built-in ostream
-        // operator overloading
-        spdlog::info("Current manipulability:");
-        std::cout << client.manipulability() << std::endl;
+        spdlog::info("Current configuration scores by joint group:");
+        std::cout << client.configuration_score() << std::endl;
         std::this_thread::sleep_for(std::chrono::seconds(1));
     }
 }
@@ -74,7 +71,7 @@ int main(int argc, char* argv[])
     // Print description
     spdlog::info(
         ">>> Tutorial description <<<\nThis tutorial check connection "
-        "with the robot and print current manipulability.");
+        "with the robot and print current configuration scores.");
 
     // Setup signal handler for graceful exit
     std::signal(SIGINT, SignalHandler);
@@ -85,10 +82,10 @@ int main(int argc, char* argv[])
         // Instantiate DDK client interface
         flexiv::ddk::Client client(robot_sn);
 
-        // Print Commands
+        // Print configuration scores
         // =========================================================================================
         // Use std::thread to do scheduling so that this example can run on all OS
-        std::thread low_priority_thread(std::bind(printManipulability, std::ref(client)));
+        std::thread low_priority_thread(std::bind(printConfigurationScore, std::ref(client)));
 
         // Properly exit thread
         low_priority_thread.join();

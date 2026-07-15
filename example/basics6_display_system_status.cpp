@@ -2,7 +2,7 @@
  * @example basics6_display_system_status.cpp
  * This tutorial check connection with the robot and print current system
  * status.
- * @copyright Copyright (C) 2016-2024 Flexiv Ltd. All Rights Reserved.
+ * @copyright Copyright (C) 2016-2026 Flexiv Ltd. All Rights Reserved.
  * @author Flexiv
  */
 #include <atomic>
@@ -55,11 +55,16 @@ void printSystemStatus(flexiv::ddk::Client& client)
 
         std::cout << "E-stop released states: " << client.estop_released() << std::endl;
 
-        std::cout << "Enabling button released states: " << client.enabling_button_pressed()
-                  << std::endl;
+        std::cout << "Enabling device ON: " << client.enabling_device_on() << std::endl;
         std::cout << "Digital inputs: ";
         for (size_t i = 0; i < flexiv::ddk::kIOPorts; i++) {
             std::cout << client.digital_inputs()[i] << " ";
+        }
+        std::cout << "\n";
+
+        std::cout << "Digital outputs: ";
+        for (size_t i = 0; i < flexiv::ddk::kIOPorts; i++) {
+            std::cout << client.digital_outputs()[i] << " ";
         }
         std::cout << "\n";
 

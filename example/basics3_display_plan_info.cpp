@@ -2,7 +2,7 @@
  * @example basics3_display_plan_info.cpp
  * This tutorial check connection with the robot and print current running plan
  * info.
- * @copyright Copyright (C) 2016-2024 Flexiv Ltd. All Rights Reserved.
+ * @copyright Copyright (C) 2016-2026 Flexiv Ltd. All Rights Reserved.
  * @author Flexiv
  */
 #include <atomic>

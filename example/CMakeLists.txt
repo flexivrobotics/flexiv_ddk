@@ -14,15 +14,13 @@ endif()
 
 # Example list
 set(EXAMPLE_LIST
-  basics1_display_joint_states
-  basics2_display_cartesian_states
+  basics1_display_robot_states
+  basics2_display_robot_actions
   basics3_display_plan_info
   basics4_display_primitive_states
   basics5_display_server_time
   basics6_display_system_status
-  basics7_display_joint_commands
-  basics8_display_cartesian_commands
-  basics9_display_manipulability
+  basics8_display_configuration_score
 )
 
 
@@ -37,8 +35,8 @@ foreach(example ${EXAMPLE_LIST})
   add_executable(${example} ${example}.cpp)
   target_link_libraries(${example} flexiv::flexiv_ddk)
 
-  # C++17 required
+  # C++20 required by the grouped DDK data API.
   set_target_properties(${example} PROPERTIES
-    CXX_STANDARD 17
+    CXX_STANDARD 20
     CXX_STANDARD_REQUIRED ON)
 endforeach()
