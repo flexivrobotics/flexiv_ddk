@@ -111,7 +111,7 @@ To run a compiled example C++ program:
 
 For example:
 
-    ./basics1_display_joint_states Rizon4s-123456
+    ./basics1_display_joint_states Enlight-L-123456
 
 ## API Documentation
 

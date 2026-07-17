@@ -27,7 +27,7 @@ public:
      * @brief [Blocking] Create an instance as the data distribution client. DDK
      * services will initialize and connection with the robot will be established.
      * @param[in] robot_sn Serial number of the robot to connect. The accepted
-     * formats are: "Rizon 4s-123456" and "Rizon4s-123456".
+     * formats is: "Enlight-L-123456".
      * @param[in] verbose Enable/disable info and warning prints.
      * @throw std::invalid_argument if the format of [robot_sn] is invalid.
      * @throw std::runtime_error if the initialization sequence failed.

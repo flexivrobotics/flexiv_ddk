@@ -34,7 +34,7 @@ void PrintHelp()
     // clang-format off
     std::cout << "Required arguments: [robot SN]" << std::endl;
     std::cout << "    robot SN: Serial number of the robot to connect to. "
-                 "Remove any space, for example: Rizon4s-123456" << std::endl;
+                 "Remove any space, for example: Enlight-L-123456" << std::endl;
     std::cout << "Optional arguments: None" << std::endl;
     std::cout << std::endl;
     // clang-format on
@@ -82,7 +82,7 @@ int main(int argc, char* argv[])
         return 1;
     }
     // Serial number of the robot to connect to. Remove any space, for example:
-    // Rizon4s-123456
+    // Enlight-L-123456
     std::string robot_sn = argv[1];
 
     // Print description
