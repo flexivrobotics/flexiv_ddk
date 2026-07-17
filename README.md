@@ -87,7 +87,7 @@ For example:
    * MSVC ... C++ x64/x86 build tools (Latest)
    * C++ CMake tools for Windows
    * Windows 10 SDK or Windows 11 SDK, depending on your actual Windows version
-2. Install CMake (with GUI): Download ``cmake-3.x.x-windows-x86_64.msi`` from [CMake download page](https://cmake.org/download/) and install the msi file. The minimum required version is 3.16.3. **Add CMake to system PATH** when prompted, so that ``cmake`` and ``cmake-gui`` command can be used from Command Prompt or a bash emulator.
+2. Install CMake (with GUI): Download ``cmake-3.x.x-windows-x86_64.msi`` from [CMake download page](https://cmake.org/download/) and install the msi file. The minimum required version is 3.22.1. **Add CMake to system PATH** when prompted, so that ``cmake`` and ``cmake-gui`` command can be used from Command Prompt or a bash emulator.
 3. Install bash emulator: Download and install [Git for Windows](https://git-scm.com/download/win/), which comes with a bash emulator Git Bash.
 4. Within the bash emulator, the rest are identical to steps 2 and below in [Install on Linux](#install-on-linux).
 
@@ -102,7 +102,7 @@ After DDK is installed, it can be found as a CMake library and linked to by othe
 
 NOTE: ``-D`` followed by ``CMAKE_INSTALL_PREFIX`` tells the user project's CMake where to find the installed DDK library. The instruction above applies to all supported OS.
 
-### Run example C++ programs
+### Run example C++ programs on Linux
 
 To run a compiled example C++ program:
 
@@ -111,7 +111,29 @@ To run a compiled example C++ program:
 
 For example:
 
-    ./basics1_display_joint_states Enlight-L-123456
+    ./<program_name> Enlight-L-123456
+
+### Run example C++ programs on Windows 
+#### Windows - Command Prompt
+
+Windows does not support RPATH, so the install location of the dependencies' shared libraries must be explicitly specified by adding the `bin` folder under the installation directory to `PATH` for the current session, before executing the example programs:
+
+    cd flexiv_ddk\example\build
+    set PATH=%USERPROFILE%\ddk_install\bin;%PATH%
+    Release\<example-name>.exe <robot-sn>
+
+Alternatively, add the `bin` folder to the system or user `PATH` environment variable to make this change permanent instead of per-session.
+
+> [!WARNING]
+> If the `bin` folder is not on `PATH`, the program will exit immediately with no error message on Command Prompt, because Windows terminates the process with exit code `0xC0000135` (`STATUS_DLL_NOT_FOUND`) before any output is produced. Run `echo %ERRORLEVEL%` right after to confirm this is the cause (it prints `-1073741515` on failure, `0` on success).
+
+#### Windows - bash emulator (such as Git Bash)
+
+The same rule applies in a bash emulator, but using bash syntax to set `PATH` for the current session (note the use of `/` as path separator and `:` to delimit entries):
+
+    cd flexiv_ddk/example/build
+    export PATH="$USERPROFILE/ddk_install/bin:$PATH"
+    ./Release/<example-name>.exe <robot-sn>
 
 ## API Documentation
 
