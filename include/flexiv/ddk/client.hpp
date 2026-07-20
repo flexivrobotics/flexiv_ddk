@@ -27,7 +27,7 @@ public:
      * @brief [Blocking] Create an instance as the data distribution client. DDK
      * services will initialize and connection with the robot will be established.
      * @param[in] robot_sn Serial number of the robot to connect. The accepted
-     * formats is: "Enlight-L-123456".
+     * format is: "Enlight-L-123456".
      * @param[in] verbose Enable/disable info and warning prints.
      * @throw std::invalid_argument if the format of [robot_sn] is invalid.
      * @throw std::runtime_error if the initialization sequence failed.
@@ -48,7 +48,7 @@ public:
 
     /**
      * @brief [Non-blocking] Joint groups that the connected robot has.
-     * @return Existing joint groups mapped form enum value to string.
+     * @return Existing joint groups mapped from enum value to string.
      */
     std::map<JointGroup, std::string> groups() const;
 
