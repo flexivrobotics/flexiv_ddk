@@ -1,8 +1,7 @@
 /**
- * @example basics2_display_cartesian_states.cpp
- * This tutorial check connection with the robot and print received robot
- * cartesian states.
- * @copyright Copyright (C) 2016-2024 Flexiv Ltd. All Rights Reserved.
+ * @example basics1_display_robot_states.cpp
+ * This tutorial checks connection with the robot and prints received robot states.
+ * @copyright Copyright (C) 2016-2026 Flexiv Ltd. All Rights Reserved.
  * @author Flexiv
  */
 #include <atomic>
@@ -12,6 +11,7 @@
 #include <iostream>
 #include <spdlog/spdlog.h>
 #include <thread>
+
 namespace {
 /** Atomic signal to stop periodic print tasks */
 std::atomic<bool> keep_running(true);
@@ -34,14 +34,14 @@ void PrintHelp()
     // clang-format off
     std::cout << "Required arguments: [robot SN]" << std::endl;
     std::cout << "    robot SN: Serial number of the robot to connect to. "
-                 "Remove any space, for example: Rizon4s-123456" << std::endl;
+                 "Remove any space, for example: Enlight-L-123456" << std::endl;
     std::cout << "Optional arguments: None" << std::endl;
     std::cout << std::endl;
     // clang-format on
 }
 
-/** @brief Print robot Cartesian states data @ 1Hz */
-void printCartesianStates(flexiv::ddk::Client& client)
+/** @brief Print robot states data by joint group @ 1Hz */
+void PrintRobotStates(flexiv::ddk::Client& client)
 {
     while (keep_running.load()) {
         // Check connection with the robot
@@ -50,10 +50,8 @@ void printCartesianStates(flexiv::ddk::Client& client)
             std::this_thread::sleep_for(std::chrono::seconds(5));
             continue;
         }
-        // Print all robot states in JSON format using the built-in ostream operator
-        // overloading
-        spdlog::info("Current robot Cartesian states:");
-        std::cout << client.cartesian_states() << std::endl;
+        spdlog::info("Current robot states by joint group:");
+        std::cout << client.states() << std::endl;
         std::this_thread::sleep_for(std::chrono::seconds(1));
     }
 }
@@ -61,34 +59,28 @@ void printCartesianStates(flexiv::ddk::Client& client)
 int main(int argc, char* argv[])
 {
     // Program Setup
-    // =============================================================================================
-    // Parse parameters
     if (argc < 2 || flexiv::ddk::utility::ProgramArgsExistAny(argc, argv, {"-h", "--help"})) {
         PrintHelp();
         return 1;
     }
-    // Serial number of the robot to connect to. Remove any space, for example:
-    // Rizon4s-123456
     std::string robot_sn = argv[1];
 
     // Print description
     spdlog::info(
         ">>> Tutorial description <<<\nThis tutorial check connection "
-        "with the robot and print received robot cartesian states.");
+        "with the robot and print received robot states.");
 
     // Setup signal handler for graceful exit
     std::signal(SIGINT, SignalHandler);
 
     try {
         // DDK Initialization
-        // =========================================================================================
-        // Instantiate DDK client interface
         flexiv::ddk::Client client(robot_sn);
 
         // Print States
         // =========================================================================================
         // Use std::thread to do scheduling so that this example can run on all OS
-        std::thread low_priority_thread(std::bind(printCartesianStates, std::ref(client)));
+        std::thread low_priority_thread(std::bind(PrintRobotStates, std::ref(client)));
 
         // Properly exit thread
         low_priority_thread.join();

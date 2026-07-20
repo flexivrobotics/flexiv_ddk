@@ -1,8 +1,7 @@
 /**
- * @example basics1_display_joint_states.cpp
- * This tutorial check connection with the robot and print received robot joint
- * states.
- * @copyright Copyright (C) 2016-2024 Flexiv Ltd. All Rights Reserved.
+ * @example basics2_display_robot_actions.cpp
+ * This tutorial checks connection with the robot and prints received robot actions.
+ * @copyright Copyright (C) 2016-2026 Flexiv Ltd. All Rights Reserved.
  * @author Flexiv
  */
 #include <atomic>
@@ -35,14 +34,14 @@ void PrintHelp()
     // clang-format off
     std::cout << "Required arguments: [robot SN]" << std::endl;
     std::cout << "    robot SN: Serial number of the robot to connect to. "
-                 "Remove any space, for example: Rizon4s-123456" << std::endl;
+                 "Remove any space, for example: Enlight-L-123456" << std::endl;
     std::cout << "Optional arguments: None" << std::endl;
     std::cout << std::endl;
     // clang-format on
 }
 
-/** @brief Print robot joint states data @ 1Hz */
-void printJointStates(flexiv::ddk::Client& client)
+/** @brief Print robot actions data by joint group @ 1Hz */
+void printRobotActions(flexiv::ddk::Client& client)
 {
     while (keep_running.load()) {
         // Check connection with the robot
@@ -51,10 +50,8 @@ void printJointStates(flexiv::ddk::Client& client)
             std::this_thread::sleep_for(std::chrono::seconds(5));
             continue;
         }
-        // Print all robot states in JSON format using the built-in ostream operator
-        // overloading
-        spdlog::info("Current robot joint states:");
-        std::cout << client.joint_states() << std::endl;
+        spdlog::info("Current robot actions by joint group:");
+        std::cout << client.actions() << std::endl;
         std::this_thread::sleep_for(std::chrono::seconds(1));
     }
 }
@@ -71,7 +68,7 @@ int main(int argc, char* argv[])
     // Print description
     spdlog::info(
         ">>> Tutorial description <<<\nThis tutorial check connection "
-        "with the robot and print received robot joint states.");
+        "with the robot and print received robot actions.");
 
     // Setup signal handler for graceful exit
     std::signal(SIGINT, SignalHandler);
@@ -80,10 +77,10 @@ int main(int argc, char* argv[])
         // DDK Initialization
         flexiv::ddk::Client client(robot_sn);
 
-        // Print States
+        // Print actions
         // =========================================================================================
         // Use std::thread to do scheduling so that this example can run on all OS
-        std::thread low_priority_thread(std::bind(printJointStates, std::ref(client)));
+        std::thread low_priority_thread(std::bind(printRobotActions, std::ref(client)));
 
         // Properly exit thread
         low_priority_thread.join();

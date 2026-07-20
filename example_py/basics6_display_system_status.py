@@ -25,8 +25,9 @@ def print_system_status(client, logger, stop_event):
         # Print system_status
         logger.info("Current system status:")
         print(f"estop_released: {client.estop_released()}")
-        print(f"enabling_button_pressed: {client.enabling_button_pressed()}")
+        print(f"enabling_device_on: {client.enabling_device_on()}")
         print(f"digital_inputs: {client.digital_inputs()}")
+        print(f"digital_outputs: {client.digital_outputs()}")
         print("", flush=True)
         # fmt: on
 
@@ -43,7 +44,7 @@ def main():
     argparser = argparse.ArgumentParser()
     argparser.add_argument(
         "robot_sn",
-        help="Serial number of the robot to connect. Remove any space, e.g. Rizon4s-123456",
+        help="Serial number of the robot to connect. Remove any space, e.g. Enlight-L-123456",
     )
     args = argparser.parse_args()
 
@@ -63,7 +64,7 @@ def main():
 
         if not client.connected():
             logger.warn("Cannot get connected with robot, retrying ...")
-            if not client.connected()():
+            if not client.connected():
                 logger.error("Exiting ...")
                 return 1
         logger.info(f"Connected with robot {args.robot_sn}")

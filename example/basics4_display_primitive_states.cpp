@@ -2,7 +2,7 @@
  * @example basics4_display_primitive_states.cpp
  * This tutorial check connection with the robot and print current primitive
  * states.
- * @copyright Copyright (C) 2016-2024 Flexiv Ltd. All Rights Reserved.
+ * @copyright Copyright (C) 2016-2026 Flexiv Ltd. All Rights Reserved.
  * @author Flexiv
  */
 #include <atomic>
@@ -33,7 +33,7 @@ void PrintHelp()
     // clang-format off
     std::cout << "Required arguments: [robot SN]" << std::endl;
     std::cout << "    robot SN: Serial number of the robot to connect to. "
-                 "Remove any space, for example: Rizon4s-123456" << std::endl;
+                 "Remove any space, for example: Enlight-L-123456" << std::endl;
     std::cout << "Optional arguments: None" << std::endl;
     std::cout << std::endl;
     // clang-format on
@@ -49,12 +49,15 @@ void printPrimitiveStates(flexiv::ddk::Client& client)
             std::this_thread::sleep_for(std::chrono::seconds(5));
             continue;
         }
-        // Print all robot states
+        // Print primitive states for all available joint groups.
         spdlog::info("Current primitive states:");
-        for (const auto& pt : client.primitive_states()) {
-            std::cout << pt.first << " = ";
-            std::visit([](auto&& arg) { std::cout << arg; }, pt.second);
-            std::cout << std::endl;
+        for (const auto& [group, states] : client.primitive_states()) {
+            std::cout << group << ": " << states.pt_name << std::endl;
+            for (const auto& [name, value] : states.names_and_values) {
+                std::cout << "  " << name << " = ";
+                std::visit([](const auto& item) { std::cout << item; }, value);
+                std::cout << std::endl;
+            }
         }
         std::this_thread::sleep_for(std::chrono::seconds(1));
     }
@@ -70,7 +73,7 @@ int main(int argc, char* argv[])
         return 1;
     }
     // Serial number of the robot to connect to. Remove any space, for example:
-    // Rizon4s-123456
+    // Enlight-L-123456
     std::string robot_sn = argv[1];
 
     // Print description

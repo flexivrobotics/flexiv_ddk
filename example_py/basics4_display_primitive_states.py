@@ -25,13 +25,11 @@ def print_primitive_states(client, logger, stop_event):
     while not stop_event.is_set():
         # Print primitive_states
         logger.info("Current primitive states:")
-        primitive_states=client.primitive_states()
-        # fmt: off
-        if isinstance(primitive_states, dict):
-            for key, value in primitive_states.items():
-                print(f"{key} = {value}")
-        else:
-            print("Error: Expected a dictionary from primitive_states()")
+        primitive_states = client.primitive_states()
+        for group, states in primitive_states.items():
+            print(f"{group}: {states.pt_name}")
+            for name, value in states.names_and_values.items():
+                print(f"  {name} = {value}")
         print("", flush=True)
         # fmt: on
         time.sleep(1)
@@ -47,7 +45,7 @@ def main():
     argparser = argparse.ArgumentParser()
     argparser.add_argument(
         "robot_sn",
-        help="Serial number of the robot to connect. Remove any space, e.g. Rizon4s-123456",
+        help="Serial number of the robot to connect. Remove any space, e.g. Enlight-L-123456",
     )
     args = argparser.parse_args()
 
@@ -67,7 +65,7 @@ def main():
 
         if not client.connected():
             logger.warn("Cannot get connected with robot, retrying ...")
-            if not client.connected()():
+            if not client.connected():
                 logger.error("Exiting ...")
                 return 1
         logger.info(f"Connected with robot {args.robot_sn}")
