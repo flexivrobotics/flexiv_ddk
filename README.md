@@ -37,9 +37,9 @@ After the ``flexivddk`` Python package is installed, it can be imported from any
 
     python3.x
     import flexivddk
-    robot = flexivddk.Client("Rizon4-123456")
+    robot = flexivddk.Client("Enlight-L-123456")
 
-The program will start searching for a robot with serial number `Rizon4-123456`, and will exit after a couple of seconds if the specified robot is not found in the local network.
+The program will start searching for a robot with serial number `Enlight-L-123456`, and will exit after a couple of seconds if the specified robot is not found in the local network.
 
 ### Run example Python scripts
 
@@ -50,7 +50,7 @@ To run an example Python script in this repo:
 
 For example:
 
-    python3.10 ./basics1_display_joint_states.py Rizon4-123456
+    python3.10 ./basics1_display_joint_states.py Enlight-L-123456
 
 ## Quick Start - C++
 
