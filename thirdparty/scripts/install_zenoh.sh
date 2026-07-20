@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-set -e
+set -e -o pipefail
 
 # Version for both zenoh-c and zenoh-cpp
 ver_tag="1.9.0"

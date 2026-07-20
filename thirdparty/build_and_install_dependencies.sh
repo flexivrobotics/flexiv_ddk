@@ -54,7 +54,6 @@ export SHARED_CMAKE_ARGS
 mkdir -p cloned && cd cloned
 
 # Build and install all dependencies to INSTALL_DIR
-bash $SCRIPT_DIR/scripts/install_eigen.sh
 bash $SCRIPT_DIR/scripts/install_spdlog.sh
 bash $SCRIPT_DIR/scripts/install_tinyxml2.sh
 bash $SCRIPT_DIR/scripts/install_zenoh.sh
